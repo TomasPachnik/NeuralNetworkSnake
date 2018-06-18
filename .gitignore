@@ -5,6 +5,7 @@
 # Folders
 .gradle/
 .idea/
+build/
 
 # Log file
 *.log
