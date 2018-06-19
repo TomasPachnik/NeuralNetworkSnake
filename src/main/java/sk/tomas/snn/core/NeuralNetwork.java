@@ -7,12 +7,13 @@ public class NeuralNetwork {
 
     private List<List<Neural>> network;
 
+    private double learningRate = 0.25;
+    private double netLastResult;
     private int[] config = {2, 2, 1};
 
     public NeuralNetwork() {
         init();
         demo();
-        System.out.println();
     }
 
     public double run(int first, double second) {
@@ -27,7 +28,9 @@ public class NeuralNetwork {
                 neural.calculate();
             }
         }
-        return network.get(network.size() - 1).get(0).getLastResult();
+        netLastResult = network.get(network.size() - 1).get(0).getLastResult();
+        backPropagation();
+        return netLastResult;
     }
 
     public void randomizeWeights() {
@@ -56,6 +59,14 @@ public class NeuralNetwork {
                 }
             }
             network.add(item);
+        }
+    }
+
+    private void backPropagation() {
+        for (int i = network.size()-1; i>=1; i--) {
+            for (Neural neural : network.get(i)) {
+                neural.backPropagation(learningRate, netLastResult);
+            }
         }
     }
 

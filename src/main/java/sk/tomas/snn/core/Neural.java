@@ -5,7 +5,7 @@ import sk.tomas.snn.func.Func;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Neural {
+class Neural {
 
     private double x0;
     private double w0;
@@ -19,12 +19,19 @@ public class Neural {
         w0 = Func.randomInit();
     }
 
-    public void calculate() {
+    void calculate() {
         double number = 0;
         for (NeuralInput neuralInput : neuralInputs) {
             number += neuralInput.getX() * neuralInput.getW();
         }
         lastResult = Func.sigmoid(number);
+    }
+
+    void backPropagation(double learningRate, double netLastResult) {
+        for (NeuralInput neuralInput : neuralInputs) {
+            double value = learningRate * (0 - netLastResult) * neuralInput.getNeural().getLastResult() * lastResult * (1 - lastResult);
+            neuralInput.setW(neuralInput.getW() + value);
+        }
     }
 
     void randomizeWeights() {
@@ -37,11 +44,11 @@ public class Neural {
         return neuralInputs;
     }
 
-    public void setLastResult(double lastResult) {
+    void setLastResult(double lastResult) {
         this.lastResult = lastResult;
     }
 
-    public double getLastResult() {
+    double getLastResult() {
         return lastResult;
     }
 }
