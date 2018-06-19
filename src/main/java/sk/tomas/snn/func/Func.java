@@ -21,4 +21,16 @@ public class Func {
         return ((Math.random() * 2) - 1);
     }
 
+    public static boolean round(double x) {
+        return x >= 0.5;
+    }
+
+    public static double convert(boolean x) {
+        if (x) {
+            return 1;
+        }else{
+            return 0;
+        }
+    }
+
 }

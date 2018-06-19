@@ -1,21 +1,27 @@
 package sk.tomas.snn.core;
 
+import sk.tomas.snn.func.Func;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NeuralNetwork {
+public class NeuralNetwork implements Serializable {
 
     private List<List<Neural>> network;
 
     private double learningRate = 0.25;
-    private double netLastResult;
     private int[] config = {2, 2, 1};
 
     public NeuralNetwork() {
         init();
     }
 
-    public double run(int first, double second, int expected) {
+    public boolean calculate(int first, double second) {
+        return Func.round(run(first, second));
+    }
+
+    private double run(int first, double second) {
         network.get(0).get(0).setLastResult(first);
         network.get(0).get(1).setLastResult(second);
 
@@ -27,8 +33,12 @@ public class NeuralNetwork {
                 neural.forwardPropagation();
             }
         }
-        netLastResult = network.get(network.size() - 1).get(0).getLastResult();
-        backPropagation(expected - netLastResult);
+        return network.get(network.size() - 1).get(0).getLastResult();
+    }
+
+    public double teach(int first, double second, boolean expected) {
+        double netLastResult = run(first, second);
+        backPropagation(Func.convert(expected) - netLastResult);
         return netLastResult;
     }
 

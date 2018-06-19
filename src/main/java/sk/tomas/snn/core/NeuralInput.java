@@ -1,39 +1,38 @@
 package sk.tomas.snn.core;
 
-public class NeuralInput {
+import java.io.Serializable;
+
+class NeuralInput implements Serializable {
 
     private double x;
     private double w;
     private Neural neural;
 
-    public NeuralInput() {
+    NeuralInput() {
     }
 
-    public NeuralInput(Neural neural) {
+    NeuralInput(Neural neural) {
         this.neural = neural;
     }
 
-    public double getX() {
+    double getX() {
         return x;
     }
 
-    public void setX(double x) {
+    void setX(double x) {
         this.x = x;
     }
 
-    public double getW() {
+    double getW() {
         return w;
     }
 
-    public void setW(double w) {
+    void setW(double w) {
         this.w = w;
     }
 
-    public Neural getNeural() {
+    Neural getNeural() {
         return neural;
     }
 
-    public void setNeural(Neural neural) {
-        this.neural = neural;
-    }
 }

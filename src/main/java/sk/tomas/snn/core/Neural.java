@@ -2,10 +2,11 @@ package sk.tomas.snn.core;
 
 import sk.tomas.snn.func.Func;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-class Neural {
+class Neural implements Serializable {
 
     private double x0;
     private double w0;
