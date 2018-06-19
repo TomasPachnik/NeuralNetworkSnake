@@ -11,15 +11,23 @@ public class NeuralNetwork {
 
     public NeuralNetwork() {
         init();
+        demo();
+        System.out.println();
     }
 
-    public int run(int first, double second) {
-        for (Neural neural : network.get(0)) {
-            neural.getNeuralInputs().get(0).setX(first);
-            neural.getNeuralInputs().get(1).setX(second);
-        }
+    public double run(int first, double second) {
+        network.get(0).get(0).setLastResult(first);
+        network.get(0).get(1).setLastResult(second);
 
-        return 0;
+        for (int i = 1; i < network.size(); i++) {
+            for (Neural neural : network.get(i)) {
+                for (NeuralInput neuralInput : neural.getNeuralInputs()) {
+                    neuralInput.setX(neuralInput.getNeural().getLastResult());
+                }
+                neural.calculate();
+            }
+        }
+        return network.get(network.size() - 1).get(0).getLastResult();
     }
 
     public void randomizeWeights() {
@@ -49,6 +57,15 @@ public class NeuralNetwork {
             }
             network.add(item);
         }
+    }
+
+    public void demo() {
+        network.get(1).get(0).getNeuralInputs().get(0).setW(0.62);
+        network.get(1).get(0).getNeuralInputs().get(1).setW(0.55);
+        network.get(1).get(1).getNeuralInputs().get(0).setW(0.42);
+        network.get(1).get(1).getNeuralInputs().get(1).setW(-0.17);
+        network.get(2).get(0).getNeuralInputs().get(0).setW(0.35);
+        network.get(2).get(0).getNeuralInputs().get(1).setW(0.81);
     }
 
 }

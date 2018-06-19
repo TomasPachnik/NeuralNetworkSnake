@@ -8,7 +8,10 @@ public class Main {
         NeuralNetwork neuralNetwork = new NeuralNetwork();
 
         neuralNetwork.randomizeWeights();
-        neuralNetwork.run(0, 1);
+        neuralNetwork.demo();
+        double result = neuralNetwork.run(0, 1);
+        System.out.println(result);
+
     }
 
 }
