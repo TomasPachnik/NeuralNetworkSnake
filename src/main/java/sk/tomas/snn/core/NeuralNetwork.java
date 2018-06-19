@@ -13,7 +13,6 @@ public class NeuralNetwork {
 
     public NeuralNetwork() {
         init();
-        demo();
     }
 
     public double run(int first, double second, int expected) {
@@ -25,7 +24,7 @@ public class NeuralNetwork {
                 for (NeuralInput neuralInput : neural.getNeuralInputs()) {
                     neuralInput.setX(neuralInput.getNeural().getLastResult());
                 }
-                neural.calculate();
+                neural.forwardPropagation();
             }
         }
         netLastResult = network.get(network.size() - 1).get(0).getLastResult();
@@ -68,26 +67,5 @@ public class NeuralNetwork {
                 neural.backPropagation(learningRate, mistake);
             }
         }
-    }
-
-    public void demo() {
-        network.get(1).get(0).getNeuralInputs().get(0).setW(0.62);
-        network.get(1).get(1).getNeuralInputs().get(0).setW(0.42);
-/*
-        network.get(1).get(0).getNeuralInputs().get(1).setW(-9.43);
-        network.get(1).get(1).getNeuralInputs().get(1).setW(-9.43);
-        network.get(2).get(0).getNeuralInputs().get(0).setW(-2.56);
-        network.get(2).get(0).getNeuralInputs().get(1).setW(-1.70);
-*/
-
-        network.get(1).get(0).getNeuralInputs().get(1).setW(0.55);
-        network.get(1).get(1).getNeuralInputs().get(1).setW(-0.17);
-        network.get(2).get(0).getNeuralInputs().get(0).setW(0.35);
-        network.get(2).get(0).getNeuralInputs().get(1).setW(0.81);
-
-    }
-
-    public double getNetLastResult() {
-        return netLastResult;
     }
 }
