@@ -7,7 +7,8 @@ public class Main {
     public static void main(String[] args) {
         NeuralNetwork neuralNetwork = new NeuralNetwork();
 
-        neuralNetwork.run(2);
+        neuralNetwork.randomizeWeights();
+        neuralNetwork.run(0, 1);
     }
 
 }

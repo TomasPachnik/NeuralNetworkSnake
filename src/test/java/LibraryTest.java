@@ -9,6 +9,10 @@ import static org.junit.Assert.*;
 public class LibraryTest {
     @Test
     public void testSomeLibraryMethod() {
+
+        for (int i = 0; i < 100; i++) {
+            System.out.println(((Math.random() * 2) - 1));
+        }
         assertTrue("someLibraryMethod should return 'true'", true);
     }
 }
