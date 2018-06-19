@@ -16,7 +16,7 @@ public class NeuralNetwork {
         demo();
     }
 
-    public double run(int first, double second) {
+    public double run(int first, double second, int expected) {
         network.get(0).get(0).setLastResult(first);
         network.get(0).get(1).setLastResult(second);
 
@@ -29,7 +29,7 @@ public class NeuralNetwork {
             }
         }
         netLastResult = network.get(network.size() - 1).get(0).getLastResult();
-        backPropagation();
+        backPropagation(expected - netLastResult);
         return netLastResult;
     }
 
@@ -62,21 +62,32 @@ public class NeuralNetwork {
         }
     }
 
-    private void backPropagation() {
-        for (int i = network.size()-1; i>=1; i--) {
+    private void backPropagation(double mistake) {
+        for (int i = network.size() - 1; i >= 1; i--) {
             for (Neural neural : network.get(i)) {
-                neural.backPropagation(learningRate, netLastResult);
+                neural.backPropagation(learningRate, mistake);
             }
         }
     }
 
     public void demo() {
         network.get(1).get(0).getNeuralInputs().get(0).setW(0.62);
-        network.get(1).get(0).getNeuralInputs().get(1).setW(0.55);
         network.get(1).get(1).getNeuralInputs().get(0).setW(0.42);
+/*
+        network.get(1).get(0).getNeuralInputs().get(1).setW(-9.43);
+        network.get(1).get(1).getNeuralInputs().get(1).setW(-9.43);
+        network.get(2).get(0).getNeuralInputs().get(0).setW(-2.56);
+        network.get(2).get(0).getNeuralInputs().get(1).setW(-1.70);
+*/
+
+        network.get(1).get(0).getNeuralInputs().get(1).setW(0.55);
         network.get(1).get(1).getNeuralInputs().get(1).setW(-0.17);
         network.get(2).get(0).getNeuralInputs().get(0).setW(0.35);
         network.get(2).get(0).getNeuralInputs().get(1).setW(0.81);
+
     }
 
+    public double getNetLastResult() {
+        return netLastResult;
+    }
 }

@@ -29,7 +29,7 @@ class Neural {
 
     void backPropagation(double learningRate, double netLastResult) {
         for (NeuralInput neuralInput : neuralInputs) {
-            double value = learningRate * (0 - netLastResult) * neuralInput.getNeural().getLastResult() * lastResult * (1 - lastResult);
+            double value = learningRate * netLastResult * neuralInput.getNeural().getLastResult() * lastResult * (1 - lastResult);
             neuralInput.setW(neuralInput.getW() + value);
         }
     }

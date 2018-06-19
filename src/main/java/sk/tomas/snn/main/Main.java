@@ -7,12 +7,17 @@ public class Main {
     public static void main(String[] args) {
         NeuralNetwork neuralNetwork = new NeuralNetwork();
         neuralNetwork.randomizeWeights();
-        neuralNetwork.demo();
-        for (int i=0;i<10000;i++){
-            neuralNetwork.run(0, 1);
+        //neuralNetwork.demo();
+        double result1 = 0;
+        double result2 = 0;
+        int number = 1000000;
+        for (int i = 0; i < number; i++) {
+            result1 = neuralNetwork.run(-1, 1, 0);
+            result2 = neuralNetwork.run(1, 1, 1);
         }
-        double result = neuralNetwork.run(0, 1);
-        System.out.println(result);
+        System.out.println(result1);
+        System.out.println(result2);
+
     }
 
 }
