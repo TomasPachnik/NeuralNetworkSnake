@@ -11,7 +11,7 @@ public class NeuralNetwork implements Serializable {
     private List<List<Neural>> network;
 
     private double learningRate = 0.25;
-    private int[] config = {2, 2, 1};
+    private int[] config = {12, 8, 4};
 
     public NeuralNetwork() {
         init();

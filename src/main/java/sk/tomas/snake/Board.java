@@ -40,5 +40,4 @@ class Board {
         }
         System.out.println();
     }
-
 }

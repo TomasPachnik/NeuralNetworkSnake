@@ -59,8 +59,73 @@ class Snake {
         return false;
     }
 
+    public int wallLeft(Node node) {
+        return node.getY();
+    }
+
+    public int wallRight(Node node) {
+        return board.getGridHeight() - node.getY() - 1;
+    }
+
+    public int wallUp(Node node) {
+        return node.getX();
+    }
+
+    public int wallDown(Node node) {
+        return board.getGridWidth() - node.getX() - 1;
+    }
+
+    public int appleLeft(Node node) {
+        int temp = node.getY();
+        while (temp > 0) {
+            if (board.getAtPosition(node.getX(), temp).isApple()) {
+                return node.getY() - temp;
+            } else {
+                temp--;
+            }
+        }
+        return 0;
+    }
+
+    public int appleRight(Node node) {
+        int temp = node.getY();
+        while (temp < board.getGridHeight()) {
+            if (board.getAtPosition(node.getX(), temp).isApple()) {
+                return temp - node.getY();
+            } else {
+                temp++;
+            }
+        }
+        return 0;
+    }
+
+    public int appleUp(Node node) {
+        int temp = node.getX();
+        while (temp > 0) {
+            if (board.getAtPosition(temp, node.getY()).isApple()) {
+                return node.getX() - temp;
+            } else {
+                temp--;
+            }
+        }
+        return 0;
+    }
+
+    public int appleDown(Node node) {
+        int temp = node.getX();
+        while (temp < board.getGridWidth()) {
+            if (board.getAtPosition(temp, node.getY()).isApple()) {
+                return temp - node.getX();
+            } else {
+                temp++;
+            }
+        }
+        return 0;
+    }
+
     private void move(Node first) {
-        System.out.println(first);
+        System.out.println(appleUp(first));
+        System.out.println(appleDown(first));
         first.setSnakeBody(true);
         body.add(0, first);
         if (first.isApple()) {
