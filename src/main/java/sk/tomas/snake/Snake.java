@@ -182,7 +182,6 @@ class Snake {
             last.setSnakeBody(false);
             body.remove(last);
         }
-        System.out.println(body.size());
     }
 
 
