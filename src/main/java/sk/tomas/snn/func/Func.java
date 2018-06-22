@@ -27,10 +27,10 @@ public class Func {
         return x >= 0.5;
     }
 
-    private static double[] mistake(double[] calculation, double[] expected) {
+    public static double[] mistake(double[] calculation, double[] expected) {
         double[] result = new double[4];
         for (int i = 0; i < 4; i++) {
-            result[i] = calculation[i] - expected[i];
+            result[i] = expected[i] - calculation[i];
         }
         return result;
     }
@@ -38,10 +38,14 @@ public class Func {
     public static double calculateMistake(double[] calculation, double[] expected) {
         double[] mistake = mistake(calculation, expected);
         double result = 0;
+        int count = 1;
+        int total = 1;
         for (double aMistake : mistake) {
-            result += Math.abs(aMistake);
+            result += Math.abs(aMistake * count);
+            count *= 2;
+            total += count;
         }
-        return result / mistake.length;
+        return result / total;
     }
 
 

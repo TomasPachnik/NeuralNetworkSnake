@@ -79,13 +79,16 @@ public class NeuralNetwork implements Serializable {
     }
 
     public double[] teach(double wallUp, double wallDown, double wallLeft, double wallRight,
-                        double appleUp, double appleDown, double appleLeft, double appleRight,
-                        double bodyUp, double bodyDown, double bodyLeft, double bodyRight, double[] expected
-                        ) {
-
-
+                          double appleUp, double appleDown, double appleLeft, double appleRight,
+                          double bodyUp, double bodyDown, double bodyLeft, double bodyRight, double[] expected
+    ) {
         double[] calculation = run(wallUp, wallDown, wallLeft, wallRight, appleUp, appleDown, appleLeft, appleRight, bodyUp, bodyDown, bodyLeft, bodyRight);
-        backPropagation(Func.calculateMistake(calculation, expected));
+        double[] mistake = Func.mistake(calculation, expected);
+        for (double v : mistake) {
+      //      System.out.print(v + " ");
+        }
+   //     System.out.println();
+        backPropagation(mistake);
         return calculation;
     }
 
@@ -122,6 +125,17 @@ public class NeuralNetwork implements Serializable {
         for (int i = network.size() - 1; i >= 1; i--) {
             for (Neural neural : network.get(i)) {
                 neural.backPropagation(learningRate, mistake);
+            }
+        }
+    }
+
+    private void backPropagation(double[] mistake) {
+        for (int i = 0; i < mistake.length; i++) {
+            network.get(network.size() - 1).get(i).backPropagation(learningRate, mistake[i]);
+            for (int j = network.size() - 2; j >= 1; j--) {
+                for (Neural neural : network.get(j)) {
+                    neural.backPropagation(learningRate, mistake[i]);
+                }
             }
         }
     }

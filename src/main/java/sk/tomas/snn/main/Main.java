@@ -23,7 +23,7 @@ public class Main {
     public static void main(String[] args) {
         NeuralNetwork neuralNetwork = new NeuralNetwork();
         neuralNetwork.randomizeWeights();
-        int number = 100;
+        int number = 1000;
         for (int i = 0; i < number; i++) {
             boolean alive = true;
             Control snake = new Core();
@@ -37,7 +37,14 @@ public class Main {
                         Func.expected(bestMove));
                 Direction neuralMove = Func.calcDirection(move);
                 alive = snake.move(neuralMove);
-                System.out.println(move + " - " + Func.expected(bestMove));
+                for (double v : move) {
+              //      System.out.print(v + " ");
+                }
+             //   System.out.print(" -> ");
+                for (double v : Func.expected(bestMove)) {
+            //        System.out.print(v + " ");
+                }
+           //     System.out.println();
                 if (!alive) {
                     System.out.println(snake.getScore());
                 }
