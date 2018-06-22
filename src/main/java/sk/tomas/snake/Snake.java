@@ -183,10 +183,6 @@ class Snake {
             body.remove(last);
         }
         System.out.println(body.size());
-        System.out.println(bodyLeft(first));
-        System.out.println(bodyRight(first));
-        System.out.println(bodyUp(first));
-        System.out.println(bodyDown(first));
     }
 
 
