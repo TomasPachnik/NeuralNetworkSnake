@@ -29,7 +29,7 @@ class Snake {
                 }
                 return false;
             case RIGHT:
-                if (body.get(0).getY() < board.getGridHeight()) {
+                if (body.get(0).getY() < board.getGridHeight() - 1) {
                     temp = board.getAtPosition(body.get(0).getX(), body.get(0).getY() + 1);
                     if (!temp.isSnakeBody()) {
                         move(temp);
@@ -47,7 +47,7 @@ class Snake {
                 }
                 return false;
             case DOWN:
-                if (body.get(0).getX() < board.getGridWidth()) {
+                if (body.get(0).getX() < board.getGridWidth() - 1) {
                     temp = board.getAtPosition(body.get(0).getX() + 1, body.get(0).getY());
                     if (!temp.isSnakeBody()) {
                         move(temp);
@@ -123,6 +123,54 @@ class Snake {
         return 0;
     }
 
+    public int bodyLeft(Node node) {
+        int temp = node.getY() - 1;
+        while (temp >= 0) {
+            if (board.getAtPosition(node.getX(), temp).isSnakeBody()) {
+                return node.getY() - temp;
+            } else {
+                temp--;
+            }
+        }
+        return 0;
+    }
+
+    public int bodyRight(Node node) {
+        int temp = node.getY() + 1;
+        while (temp < board.getGridHeight()) {
+            if (board.getAtPosition(node.getX(), temp).isSnakeBody()) {
+                return temp - node.getY();
+            } else {
+                temp++;
+            }
+        }
+        return 0;
+    }
+
+    public int bodyUp(Node node) {
+        int temp = node.getX() - 1;
+        while (temp >= 0) {
+            if (board.getAtPosition(temp, node.getY()).isSnakeBody()) {
+                return node.getX() - temp;
+            } else {
+                temp--;
+            }
+        }
+        return 0;
+    }
+
+    public int bodyDown(Node node) {
+        int temp = node.getX() + 1;
+        while (temp < board.getGridWidth()) {
+            if (board.getAtPosition(temp, node.getY()).isSnakeBody()) {
+                return temp - node.getX();
+            } else {
+                temp++;
+            }
+        }
+        return 0;
+    }
+
     private void move(Node first) {
         first.setSnakeBody(true);
         body.add(0, first);
@@ -134,6 +182,11 @@ class Snake {
             last.setSnakeBody(false);
             body.remove(last);
         }
+        System.out.println(body.size());
+        System.out.println(bodyLeft(first));
+        System.out.println(bodyRight(first));
+        System.out.println(bodyUp(first));
+        System.out.println(bodyDown(first));
     }
 
 
