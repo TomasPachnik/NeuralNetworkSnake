@@ -1,9 +1,10 @@
 package sk.tomas.snake;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-class Snake {
+class Snake implements Serializable {
 
     private List<Node> body;
     private Board board;
@@ -13,6 +14,7 @@ class Snake {
         this.board = board;
         this.core = core;
         body = new ArrayList<>();
+        head.setSnakeBody(true);
         body.add(0, head);
     }
 
@@ -59,27 +61,27 @@ class Snake {
         return false;
     }
 
-    public int wallLeft(Node node) {
-        return node.getY();
+    int wallLeft() {
+        return getHead().getY();
     }
 
-    public int wallRight(Node node) {
-        return board.getGridHeight() - node.getY() - 1;
+    int wallRight() {
+        return board.getGridHeight() - getHead().getY() - 1;
     }
 
-    public int wallUp(Node node) {
-        return node.getX();
+    int wallUp() {
+        return getHead().getX();
     }
 
-    public int wallDown(Node node) {
-        return board.getGridWidth() - node.getX() - 1;
+    int wallDown() {
+        return board.getGridWidth() - getHead().getX() - 1;
     }
 
-    public int appleLeft(Node node) {
-        int temp = node.getY();
+    int appleLeft() {
+        int temp = getHead().getY();
         while (temp >= 0) {
-            if (board.getAtPosition(node.getX(), temp).isApple()) {
-                return node.getY() - temp;
+            if (board.getAtPosition(getHead().getX(), temp).isApple()) {
+                return getHead().getY() - temp;
             } else {
                 temp--;
             }
@@ -87,11 +89,11 @@ class Snake {
         return 0;
     }
 
-    public int appleRight(Node node) {
-        int temp = node.getY();
+    int appleRight() {
+        int temp = getHead().getY();
         while (temp < board.getGridHeight()) {
-            if (board.getAtPosition(node.getX(), temp).isApple()) {
-                return temp - node.getY();
+            if (board.getAtPosition(getHead().getX(), temp).isApple()) {
+                return temp - getHead().getY();
             } else {
                 temp++;
             }
@@ -99,11 +101,11 @@ class Snake {
         return 0;
     }
 
-    public int appleUp(Node node) {
-        int temp = node.getX();
+    int appleUp() {
+        int temp = getHead().getX();
         while (temp >= 0) {
-            if (board.getAtPosition(temp, node.getY()).isApple()) {
-                return node.getX() - temp;
+            if (board.getAtPosition(temp, getHead().getY()).isApple()) {
+                return getHead().getX() - temp;
             } else {
                 temp--;
             }
@@ -111,11 +113,11 @@ class Snake {
         return 0;
     }
 
-    public int appleDown(Node node) {
-        int temp = node.getX();
+    int appleDown() {
+        int temp = getHead().getX();
         while (temp < board.getGridWidth()) {
-            if (board.getAtPosition(temp, node.getY()).isApple()) {
-                return temp - node.getX();
+            if (board.getAtPosition(temp, getHead().getY()).isApple()) {
+                return temp - getHead().getX();
             } else {
                 temp++;
             }
@@ -123,11 +125,11 @@ class Snake {
         return 0;
     }
 
-    public int bodyLeft(Node node) {
-        int temp = node.getY() - 1;
+    int bodyLeft() {
+        int temp = getHead().getY() - 1;
         while (temp >= 0) {
-            if (board.getAtPosition(node.getX(), temp).isSnakeBody()) {
-                return node.getY() - temp;
+            if (board.getAtPosition(getHead().getX(), temp).isSnakeBody()) {
+                return getHead().getY() - temp;
             } else {
                 temp--;
             }
@@ -135,11 +137,11 @@ class Snake {
         return 0;
     }
 
-    public int bodyRight(Node node) {
-        int temp = node.getY() + 1;
+    int bodyRight() {
+        int temp = getHead().getY() + 1;
         while (temp < board.getGridHeight()) {
-            if (board.getAtPosition(node.getX(), temp).isSnakeBody()) {
-                return temp - node.getY();
+            if (board.getAtPosition(getHead().getX(), temp).isSnakeBody()) {
+                return temp - getHead().getY();
             } else {
                 temp++;
             }
@@ -147,11 +149,11 @@ class Snake {
         return 0;
     }
 
-    public int bodyUp(Node node) {
-        int temp = node.getX() - 1;
+    int bodyUp() {
+        int temp = getHead().getX() - 1;
         while (temp >= 0) {
-            if (board.getAtPosition(temp, node.getY()).isSnakeBody()) {
-                return node.getX() - temp;
+            if (board.getAtPosition(temp, getHead().getY()).isSnakeBody()) {
+                return getHead().getX() - temp;
             } else {
                 temp--;
             }
@@ -159,16 +161,20 @@ class Snake {
         return 0;
     }
 
-    public int bodyDown(Node node) {
-        int temp = node.getX() + 1;
+    int bodyDown() {
+        int temp = getHead().getX() + 1;
         while (temp < board.getGridWidth()) {
-            if (board.getAtPosition(temp, node.getY()).isSnakeBody()) {
-                return temp - node.getX();
+            if (board.getAtPosition(temp, getHead().getY()).isSnakeBody()) {
+                return temp - getHead().getX();
             } else {
                 temp++;
             }
         }
         return 0;
+    }
+
+    Node getHead() {
+        return body.get(0);
     }
 
     private void move(Node first) {
@@ -176,13 +182,13 @@ class Snake {
         body.add(0, first);
         if (first.isApple()) {
             first.setApple(false);
-            core.setAppleAtRandomPosition();
+            core.setAppleAtRandomPosition(false);
+            core.eatAppleScore();
         } else {
             Node last = body.get(body.size() - 1);
             last.setSnakeBody(false);
             body.remove(last);
         }
     }
-
 
 }

@@ -1,6 +1,8 @@
 package sk.tomas.snake;
 
-class Board {
+import java.io.Serializable;
+
+class Board implements Serializable {
 
     private Node board[][];
 
