@@ -25,4 +25,12 @@ public class LibraryTest {
             System.out.print(v + " ");
         }
     }
+
+    @Test
+    public void lnTest() {
+        double l = 0.619;
+        double result = Math.log(l);
+        System.out.println(result);
+    }
+
 }

@@ -24,4 +24,12 @@ class Util {
         return array;
     }
 
+    static double crossEntropy(double[] truePrediction, double[] probablyPrediction) {
+        double result = 0;
+        for (int i = 0; i < truePrediction.length; i++) {
+            result += (truePrediction[i] * Math.log(probablyPrediction[i]));
+        }
+        return ((-1) * result);
+    }
+
 }

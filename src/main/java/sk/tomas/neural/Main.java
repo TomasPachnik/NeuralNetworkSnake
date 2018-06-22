@@ -12,6 +12,11 @@ public class Main {
 
         network.teach(input, input);
         System.out.println();
+
+        double[] a = new double[]{0, 1, 0};
+        double[] b = new double[]{0.228, 0.619, 0.153};
+        System.out.println(Util.crossEntropy(a, b));
+
     }
 
 }
