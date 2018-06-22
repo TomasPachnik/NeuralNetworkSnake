@@ -27,7 +27,7 @@ class Snake {
                         return true;
                     }
                 }
-                break;
+                return false;
             case RIGHT:
                 if (body.get(0).getY() < board.getGridHeight()) {
                     temp = board.getAtPosition(body.get(0).getX(), body.get(0).getY() + 1);
@@ -36,7 +36,7 @@ class Snake {
                         return true;
                     }
                 }
-                break;
+                return false;
             case UP:
                 if (body.get(0).getX() > 0) {
                     temp = board.getAtPosition(body.get(0).getX() - 1, body.get(0).getY());
@@ -45,7 +45,7 @@ class Snake {
                         return true;
                     }
                 }
-                break;
+                return false;
             case DOWN:
                 if (body.get(0).getX() < board.getGridWidth()) {
                     temp = board.getAtPosition(body.get(0).getX() + 1, body.get(0).getY());
@@ -54,7 +54,7 @@ class Snake {
                         return true;
                     }
                 }
-                break;
+                return false;
         }
         return false;
     }
@@ -77,7 +77,7 @@ class Snake {
 
     public int appleLeft(Node node) {
         int temp = node.getY();
-        while (temp > 0) {
+        while (temp >= 0) {
             if (board.getAtPosition(node.getX(), temp).isApple()) {
                 return node.getY() - temp;
             } else {
@@ -101,7 +101,7 @@ class Snake {
 
     public int appleUp(Node node) {
         int temp = node.getX();
-        while (temp > 0) {
+        while (temp >= 0) {
             if (board.getAtPosition(temp, node.getY()).isApple()) {
                 return node.getX() - temp;
             } else {
@@ -124,8 +124,6 @@ class Snake {
     }
 
     private void move(Node first) {
-        System.out.println(appleUp(first));
-        System.out.println(appleDown(first));
         first.setSnakeBody(true);
         body.add(0, first);
         if (first.isApple()) {
