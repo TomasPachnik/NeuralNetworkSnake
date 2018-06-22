@@ -8,7 +8,7 @@ class NeuralInput implements Serializable {
     private double w;
     private Neural ancestor;
 
-    public NeuralInput(Neural ancestor) {
+    NeuralInput(Neural ancestor) {
         this.ancestor = ancestor;
     }
 

@@ -38,7 +38,15 @@ public class Neural implements Serializable {
 
     }
 
-    public double getLastValue() {
+    double getLastValue() {
         return lastValue;
+    }
+
+    void setLastValue(double lastValue) {
+        this.lastValue = lastValue;
+    }
+
+    List<NeuralInput> getInputs() {
+        return inputs;
     }
 }

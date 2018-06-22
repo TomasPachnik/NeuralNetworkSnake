@@ -54,4 +54,35 @@ public class NetworkImpl implements Network {
         }
 
     }
+
+    @Override
+    public void teach(double[] input, double[] expected) throws InputException {
+        if (Config.networkSize[0] != input.length) {
+            throw new InputException("wrong input length");
+        }
+        for (int i = 0; i < network.get(0).size(); i++) {
+            network.get(0).get(i).setLastValue(input[i]);
+        }
+        double[] run = run();
+        for (double v : run) {
+            System.out.print(v + " ");
+        }
+    }
+
+    private double[] run() {
+        for (int i = 1; i < network.size(); i++) {
+            for (Neural neural : network.get(i)) {
+                for (NeuralInput neuralInput : neural.getInputs()) {
+                    neuralInput.setX(neuralInput.getAncestor().getLastValue());
+                }
+                neural.forwardPropagation();
+            }
+        }
+        double[] result = new double[Config.networkSize[Config.networkSize.length - 1]];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = network.get(network.size() - 1).get(i).getLastValue();
+        }
+        return result;
+    }
+
 }

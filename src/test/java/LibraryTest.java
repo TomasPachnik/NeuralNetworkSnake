@@ -10,9 +10,19 @@ public class LibraryTest {
     @Test
     public void testSomeLibraryMethod() {
 
-        for (int i = 0; i < 100; i++) {
-            System.out.println(((Math.random() * 2) - 1));
+        double[] array = new double[]{1, 2, 3, 4, 1, 2, 3};
+        for (int i = 0; i < array.length; i++) {
+            array[i] = Math.exp(array[i]);
         }
-        assertTrue("someLibraryMethod should return 'true'", true);
+        double sum = 0;
+        for (double v : array) {
+            sum += v;
+        }
+        for (int i = 0; i < array.length; i++) {
+            array[i] = array[i] / sum;
+        }
+        for (double v : array) {
+            System.out.print(v + " ");
+        }
     }
 }
