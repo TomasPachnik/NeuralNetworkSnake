@@ -1,13 +1,16 @@
 package sk.tomas.snake;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Core implements Control, Serializable {
 
     private int defaultGridHeight = 10;
-    private int defaultGridWidth = 7;
+    private int defaultGridWidth = 10;
     private int defaultSnakeLength = 3;
+    private List<Direction> lastMovements;
 
     private boolean printMove = true;
     private int score;
@@ -21,19 +24,20 @@ public class Core implements Control, Serializable {
     private Random randomX;
     private Random randomY;
 
-    public void increaseScore() {
+    private void increaseScore() {
         score += 2;
     }
 
-    public void decreaseScore() {
+    private void decreaseScore() {
         score -= 3;
     }
 
-    public void eatAppleScore() {
+    void eatAppleScore() {
         score += 20;
     }
 
     public Core() {
+        lastMovements = new ArrayList<>();
         randomX = new Random();
         randomY = new Random();
         board = new Board(defaultGridWidth, defaultGridHeight);

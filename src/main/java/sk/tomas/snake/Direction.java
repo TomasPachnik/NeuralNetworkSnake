@@ -1,5 +1,7 @@
 package sk.tomas.snake;
 
+import java.util.Random;
+
 public enum Direction {
     LEFT, RIGHT, UP, DOWN;
 
@@ -15,6 +17,11 @@ public enum Direction {
                 return RIGHT;
         }
         return UP;
+    }
+
+    public static Direction getRandomDirection() {
+        Random random = new Random();
+        return getAtPosition(random.nextInt(Direction.values().length));
     }
 
 }

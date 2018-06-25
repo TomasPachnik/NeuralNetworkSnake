@@ -1,7 +1,9 @@
 package sk.tomas.neural;
 
-interface Network {
+public interface Network {
 
-    void teach(double[] input, double[] expected) throws InputException;
+    double[] teach(double[] input, double[] expected) throws InputException;
+
+    double[] run(double[] input) throws InputException;
 
 }

@@ -6,7 +6,6 @@ import java.util.List;
 public class NetworkImpl implements Network {
 
     private List<List<Neural>> network;
-    private double learningRate = 0.5;
 
     public NetworkImpl() {
         init();
@@ -60,16 +59,21 @@ public class NetworkImpl implements Network {
     }
 
     @Override
-    public void teach(double[] input, double[] expected) throws InputException {
+    public double[] teach(double[] input, double[] expected) throws InputException {
+        double[] run = run(input);
+        backPropagation(expected);
+        return run;
+    }
+
+    @Override
+    public double[] run(double[] input) throws InputException {
         if (Config.networkSize[0] != input.length) {
             throw new InputException("wrong input length");
         }
         for (int i = 0; i < network.get(0).size(); i++) {
             network.get(0).get(i).setLastValue(input[i]);
         }
-        double[] run = run();
-        backPropagation(expected);
-        System.out.println(Util.squaredError(expected, run));
+        return run();
     }
 
     private double[] run() {
@@ -96,7 +100,7 @@ public class NetworkImpl implements Network {
             for (NeuralInput input : neural.getInputs()) {
                 if (!input.getAncestor().isBias()) {
                     double temp = Util.errorAffect(expected[i], neural.getLastValue(), input.getAncestor().getLastValue());
-                    lastLayer.add(Util.calculateNewWeight(input.getW(), learningRate, temp));
+                    lastLayer.add(Util.calculateNewWeight(input.getW(), Config.learningRate, temp));
                 }
             }
         }
@@ -108,7 +112,7 @@ public class NetworkImpl implements Network {
             for (NeuralInput input : neural.getInputs()) {
                 if (!input.getAncestor().isBias()) {
                     double temp = Util.errorAffectWithMistake(mistake, neural.getLastValue(), input.getAncestor().getLastValue());
-                    hiddenLayer.add(Util.calculateNewWeight(input.getW(), learningRate, temp));
+                    hiddenLayer.add(Util.calculateNewWeight(input.getW(), Config.learningRate, temp));
                 }
             }
         }
