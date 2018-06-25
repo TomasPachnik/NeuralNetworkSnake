@@ -28,7 +28,6 @@ public class Neural implements Serializable {
 
     void addBias(Neural bias) {
         NeuralInput neuralInput = new NeuralInput(bias);
-        neuralInput.setX(1);
         neuralInput.setW(Util.randomInit());
         inputs.add(neuralInput);
     }

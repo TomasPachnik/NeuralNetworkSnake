@@ -3,8 +3,9 @@
  */
 
 import org.junit.Test;
+import sk.tomas.neural.Util;
 
-import static org.junit.Assert.*;
+import java.util.Random;
 
 public class LibraryTest {
     @Test
@@ -30,6 +31,25 @@ public class LibraryTest {
     public void lnTest() {
         double l = 0.619;
         double result = Math.log(l);
+        System.out.println(result);
+    }
+
+    @Test
+    public void sigmoidTest() {
+        Random random = new Random();
+        //double input = random.nextDouble();
+        double input = 0.3925;
+        System.out.println(input);
+        double sigmoid = Util.sigmoid(input);
+        System.out.println(sigmoid);
+        double derivate = Util.sigmoidDerivate(sigmoid);
+        System.out.println(derivate);
+    }
+
+    @Test
+    public void errorAffectTest() {
+        double result = Util.errorAffect(0.01, 0.75136507, 0.596884378);
+        result = Util.calculateNewWeight(0.45, 0.5, result);
         System.out.println(result);
     }
 

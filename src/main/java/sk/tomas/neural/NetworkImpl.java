@@ -11,6 +11,7 @@ public class NetworkImpl implements Network {
         init();
         randomizeWeights();
         addBias();
+        setUpWeightsManually();
     }
 
     private void init() {
@@ -49,6 +50,7 @@ public class NetworkImpl implements Network {
 
     private void addBias(int layerNumber) {
         Neural bias = new Neural(new ArrayList<>());
+        bias.setLastValue(1);
         for (Neural neural : network.get(layerNumber)) {
             neural.addBias(bias);
         }
@@ -83,6 +85,23 @@ public class NetworkImpl implements Network {
             result[i] = network.get(network.size() - 1).get(i).getLastValue();
         }
         return result;
+    }
+
+    private void setUpWeightsManually(){
+        network.get(1).get(0).getInputs().get(0).setW(0.15);
+        network.get(1).get(0).getInputs().get(1).setW(0.2);
+        network.get(1).get(1).getInputs().get(0).setW(0.25);
+        network.get(1).get(1).getInputs().get(1).setW(0.3);
+
+        network.get(2).get(0).getInputs().get(0).setW(0.4);
+        network.get(2).get(0).getInputs().get(1).setW(0.45);
+        network.get(2).get(1).getInputs().get(0).setW(0.5);
+        network.get(2).get(1).getInputs().get(1).setW(0.55);
+
+        network.get(1).get(0).getInputs().get(2).setW(0.35);
+        network.get(1).get(1).getInputs().get(2).setW(0.35);
+        network.get(2).get(0).getInputs().get(2).setW(0.6);
+        network.get(2).get(1).getInputs().get(2).setW(0.6);
     }
 
 }
