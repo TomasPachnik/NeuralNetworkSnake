@@ -6,6 +6,7 @@ import java.util.List;
 public class NetworkImpl implements Network {
 
     private List<List<Neural>> network;
+    private double learningRate = 0.5;
 
     public NetworkImpl() {
         init();
@@ -50,6 +51,7 @@ public class NetworkImpl implements Network {
 
     private void addBias(int layerNumber) {
         Neural bias = new Neural(new ArrayList<>());
+        bias.setBias(true);
         bias.setLastValue(1);
         for (Neural neural : network.get(layerNumber)) {
             neural.addBias(bias);
@@ -69,6 +71,8 @@ public class NetworkImpl implements Network {
         for (double v : run) {
             System.out.print(v + " ");
         }
+        System.out.println();
+        backPropagation(run, expected);
     }
 
     private double[] run() {
@@ -87,7 +91,41 @@ public class NetworkImpl implements Network {
         return result;
     }
 
-    private void setUpWeightsManually(){
+    private void backPropagation(double[] result, double[] expected) {
+        //double errorRate = Util.squaredError(expected, result);
+        //System.out.println(errorRate);
+/*
+        List<Double> newWeights = new ArrayList<>();
+
+        for (int i = 0; i < expected.length; i++) {
+            for (Neural neural : network.get(network.size() - 2)) {
+                double temp = Util.errorAffect(expected[i], result[i], neural.getLastValue());
+                Util.calculateNewWeight(network.get(2).get(0).getInputs().get(0).getW(), learningRate, temp);
+            }
+        }
+        newWeights.forEach(System.out::println);
+
+        double o1 = Util.errorAffect(expected[0], result[0], network.get(1).get(0).getLastValue());
+        o1 = Util.calculateNewWeight(network.get(2).get(0).getInputs().get(0).getW(), learningRate, o1);
+        //System.out.println(o1);
+*/
+        //last layer
+        //for every neural
+        //for every input
+        //expected, actual, last value of neural before, weight, learning rate
+        for (int i = 0; i < expected.length; i++) {
+            Neural neural = network.get(network.size() - 1).get(i);
+            for (NeuralInput input : neural.getInputs()) {
+                if (!input.getAncestor().isBias()) {
+                    double temp = Util.errorAffect(expected[i], neural.getLastValue(), input.getAncestor().getLastValue());
+                    temp = Util.calculateNewWeight(input.getW(), learningRate, temp);
+                    System.out.println(temp);
+                }
+            }
+        }
+    }
+
+    private void setUpWeightsManually() {
         network.get(1).get(0).getInputs().get(0).setW(0.15);
         network.get(1).get(0).getInputs().get(1).setW(0.2);
         network.get(1).get(1).getInputs().get(0).setW(0.25);

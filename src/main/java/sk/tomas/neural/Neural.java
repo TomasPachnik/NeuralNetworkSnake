@@ -7,6 +7,7 @@ public class Neural implements Serializable {
 
     private List<NeuralInput> inputs;
     private double lastValue;
+    private boolean bias;
 
     Neural(List<NeuralInput> inputs) {
         this.inputs = inputs;
@@ -47,5 +48,13 @@ public class Neural implements Serializable {
 
     List<NeuralInput> getInputs() {
         return inputs;
+    }
+
+    public boolean isBias() {
+        return bias;
+    }
+
+    public void setBias(boolean bias) {
+        this.bias = bias;
     }
 }

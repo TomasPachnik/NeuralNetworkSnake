@@ -42,8 +42,8 @@ public class LibraryTest {
         System.out.println(input);
         double sigmoid = Util.sigmoid(input);
         System.out.println(sigmoid);
-        double derivate = Util.sigmoidDerivate(sigmoid);
-        System.out.println(derivate);
+        double derivable = Util.sigmoidDerivate(sigmoid);
+        System.out.println(derivable);
     }
 
     @Test
@@ -51,6 +51,13 @@ public class LibraryTest {
         double result = Util.errorAffect(0.01, 0.75136507, 0.596884378);
         result = Util.calculateNewWeight(0.45, 0.5, result);
         System.out.println(result);
+    }
+
+    @Test
+    public void squareErrorTest() {
+        double[] a = new double[]{0.01,0.99};
+        double[] b = new double[]{0.75136507,0.772928465};
+        System.out.println(Util.squaredError(a, b));
     }
 
 }

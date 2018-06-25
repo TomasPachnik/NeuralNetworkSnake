@@ -52,4 +52,16 @@ public class Util {
         return originalWeight - (learningRate * errorAffect);
     }
 
+    private static double squaredError(double target, double error) {
+        return (Math.pow((target - error), 2)) / 2;
+    }
+
+    public static double squaredError(double[] truePrediction, double[] probablyPrediction) {
+        double result = 0;
+        for (int i = 0; i < truePrediction.length; i++) {
+            result += squaredError(truePrediction[i], probablyPrediction[i]);
+        }
+        return result;
+    }
+
 }
