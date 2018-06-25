@@ -8,6 +8,7 @@ class Node implements Serializable {
     private int y;
     private boolean isSnakeBody;
     private boolean isApple;
+    private boolean isHead;
 
     Node(int x, int y) {
         this.x = x;
@@ -44,6 +45,14 @@ class Node implements Serializable {
 
     void setApple(boolean apple) {
         isApple = apple;
+    }
+
+    public boolean isHead() {
+        return isHead;
+    }
+
+    public void setHead(boolean head) {
+        isHead = head;
     }
 
     @Override

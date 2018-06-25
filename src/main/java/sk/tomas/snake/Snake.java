@@ -15,7 +15,11 @@ class Snake implements Serializable {
         this.core = core;
         body = new ArrayList<>();
         head.setSnakeBody(true);
+        head.setHead(true);
         body.add(0, head);
+        Node body1 = board.getAtPosition(head.getX(), head.getY() - 1);
+        body1.setSnakeBody(true);
+        body.add(body1);
     }
 
     boolean move(Direction direction) {
@@ -179,7 +183,12 @@ class Snake implements Serializable {
 
     private void move(Node first) {
         first.setSnakeBody(true);
+        first.setHead(true);
         body.add(0, first);
+
+        if (body.size() > 1) {
+            body.get(1).setHead(false);
+        }
         if (first.isApple()) {
             first.setApple(false);
             core.setAppleAtRandomPosition(false);

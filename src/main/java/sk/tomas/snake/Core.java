@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class Core implements Control, Serializable {
 
-    private int defaultGridHeight = 10;
+    private int defaultGridHeight = 20;
     private int defaultGridWidth = 10;
     private int defaultSnakeLength = 3;
     private List<Direction> lastMovements;

@@ -1,8 +1,8 @@
 package sk.tomas.neural;
 
-class Config {
+public class Config {
 
     static final int[] networkSize = {12, 16, 4};
-    static final double learningRate = 0.5;
+    static final double learningRate = 0.25;
 
 }

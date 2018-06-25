@@ -13,7 +13,7 @@ public class Main {
 
     public static void main(String[] args) throws InputException, InterruptedException {
         Network neuralNetwork = new NetworkImpl();
-        int max = 10000;
+        int max = 1000;
         for (int i = 0; i < max; i++) {
             boolean alive = true;
             Control snake = new Core();
@@ -26,7 +26,7 @@ public class Main {
                         snake.appleUp(), snake.appleDown(), snake.appleLeft(), snake.appleRight(),
                         snake.bodyUp(), snake.bodyDown(), snake.bodyLeft(), snake.bodyRight()};
 
-                double[] move = neuralNetwork.teach(Util.softMax(input), Func.expected(bestMove));
+                double[] move = neuralNetwork.teach(Util.simplify(input), Func.expected(bestMove));
 
                 Direction neuralMove = Func.calcDirection(move);
                 alive = snake.move(neuralMove);
@@ -43,11 +43,10 @@ public class Main {
                     snake.appleUp(), snake.appleDown(), snake.appleLeft(), snake.appleRight(),
                     snake.bodyUp(), snake.bodyDown(), snake.bodyLeft(), snake.bodyRight()};
 
-            double[] move = neuralNetwork.run(Util.softMax(input));
+            double[] move = neuralNetwork.run(Util.simplify(input));
             alive = snake.move(Func.calcDirection(move));
             //alive = snake.move(snake.calculateBestMove());
-            System.out.println(snake.getScore());
-            Thread.sleep(1000);
+            Thread.sleep(500);
         }
     }
 

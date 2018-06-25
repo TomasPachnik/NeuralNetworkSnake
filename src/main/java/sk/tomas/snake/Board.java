@@ -1,5 +1,7 @@
 package sk.tomas.snake;
 
+import sk.tomas.neural.Config;
+
 import java.io.Serializable;
 
 class Board implements Serializable {
@@ -30,7 +32,9 @@ class Board implements Serializable {
     void print() {
         for (int i = 0; i < getGridWidth(); i++) {
             for (int j = 0; j < getGridHeight(); j++) {
-                if (getAtPosition(i, j).isSnakeBody()) {
+                if (getAtPosition(i, j).isHead()) {
+                    System.out.print("X");
+                } else if (getAtPosition(i, j).isSnakeBody()) {
                     System.out.print("x");
                 } else if (getAtPosition(i, j).isApple()) {
                     System.out.print("o");

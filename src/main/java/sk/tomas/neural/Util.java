@@ -14,6 +14,18 @@ public class Util {
         return x * (1 - x);
     }
 
+
+    public static double[] simplify(double[] array) {
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] > 0) {
+                array[i] = 1;
+            } else {
+                array[i] = 0;
+            }
+        }
+        return array;
+    }
+
     public static double[] softMax(double[] array) {
         for (int i = 0; i < array.length; i++) {
             array[i] = Math.exp(array[i]);

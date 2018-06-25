@@ -11,7 +11,6 @@ public class NetworkImpl implements Network {
         init();
         randomizeWeights();
         addBias();
-        setUpWeightsManually();
     }
 
     private void init() {
@@ -62,6 +61,7 @@ public class NetworkImpl implements Network {
     public double[] teach(double[] input, double[] expected) throws InputException {
         double[] run = run(input);
         backPropagation(expected);
+        System.out.println(Util.squaredError(expected, run)*100);
         return run;
     }
 
