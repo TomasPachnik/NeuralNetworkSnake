@@ -36,16 +36,20 @@ public class Util {
         return ((-1) * result);
     }
 
-    private static double outputError(double expected, double given) {
+    static double outputError(double expected, double given) {
         return given - expected;
     }
 
-    private static double outputInput(double x) {
+    public static double outputInput(double x) {
         return x * (1 - x);
     }
 
     public static double errorAffect(double expected, double given, double outputBefore) {
         return outputError(expected, given) * outputInput(given) * outputBefore;
+    }
+
+    static double errorAffectWithMistake(double mistake, double given, double outputBefore) {
+        return mistake * outputInput(given) * outputBefore;
     }
 
     public static double calculateNewWeight(double originalWeight, double learningRate, double errorAffect) {

@@ -68,11 +68,8 @@ public class NetworkImpl implements Network {
             network.get(0).get(i).setLastValue(input[i]);
         }
         double[] run = run();
-        for (double v : run) {
-            System.out.print(v + " ");
-        }
-        System.out.println();
-        backPropagation(run, expected);
+        backPropagation(expected);
+        System.out.println(Util.squaredError(expected, run));
     }
 
     private double[] run() {
@@ -91,38 +88,60 @@ public class NetworkImpl implements Network {
         return result;
     }
 
-    private void backPropagation(double[] result, double[] expected) {
-        //double errorRate = Util.squaredError(expected, result);
-        //System.out.println(errorRate);
-/*
-        List<Double> newWeights = new ArrayList<>();
-
-        for (int i = 0; i < expected.length; i++) {
-            for (Neural neural : network.get(network.size() - 2)) {
-                double temp = Util.errorAffect(expected[i], result[i], neural.getLastValue());
-                Util.calculateNewWeight(network.get(2).get(0).getInputs().get(0).getW(), learningRate, temp);
-            }
-        }
-        newWeights.forEach(System.out::println);
-
-        double o1 = Util.errorAffect(expected[0], result[0], network.get(1).get(0).getLastValue());
-        o1 = Util.calculateNewWeight(network.get(2).get(0).getInputs().get(0).getW(), learningRate, o1);
-        //System.out.println(o1);
-*/
+    private void backPropagation(double[] expected) {
         //last layer
-        //for every neural
-        //for every input
-        //expected, actual, last value of neural before, weight, learning rate
+        List<Double> lastLayer = new ArrayList<>();
         for (int i = 0; i < expected.length; i++) {
             Neural neural = network.get(network.size() - 1).get(i);
             for (NeuralInput input : neural.getInputs()) {
                 if (!input.getAncestor().isBias()) {
                     double temp = Util.errorAffect(expected[i], neural.getLastValue(), input.getAncestor().getLastValue());
-                    temp = Util.calculateNewWeight(input.getW(), learningRate, temp);
-                    System.out.println(temp);
+                    lastLayer.add(Util.calculateNewWeight(input.getW(), learningRate, temp));
                 }
             }
         }
+        //hidden layer
+        List<Double> hiddenLayer = new ArrayList<>();
+        for (int i = 0; i < expected.length; i++) {
+            double mistake = calculateOutputMistake(i, expected);
+            Neural neural = network.get(1).get(i);
+            for (NeuralInput input : neural.getInputs()) {
+                if (!input.getAncestor().isBias()) {
+                    double temp = Util.errorAffectWithMistake(mistake, neural.getLastValue(), input.getAncestor().getLastValue());
+                    hiddenLayer.add(Util.calculateNewWeight(input.getW(), learningRate, temp));
+                }
+            }
+        }
+        //setting calculated weights
+        int index = 0;
+        for (int i = 0; i < expected.length; i++) {
+            Neural neural = network.get(network.size() - 1).get(i);
+            for (NeuralInput input : neural.getInputs()) {
+                if (!input.getAncestor().isBias()) {
+                    input.setW(lastLayer.get(index));
+                    index++;
+                }
+            }
+        }
+        index = 0;
+        for (int i = 0; i < expected.length; i++) {
+            Neural neural = network.get(1).get(i);
+            for (NeuralInput input : neural.getInputs()) {
+                if (!input.getAncestor().isBias()) {
+                    input.setW(hiddenLayer.get(index));
+                    index++;
+                }
+            }
+        }
+    }
+
+    private double calculateOutputMistake(int index, double[] expected) {
+        double count = 0;
+        for (int j = 0; j < network.get(2).size(); j++) {
+            double value = Util.outputError(expected[j], network.get(2).get(j).getLastValue()) * Util.outputInput(network.get(2).get(j).getLastValue());
+            count += value * network.get(2).get(j).getInputs().get(index).getW();
+        }
+        return count;
     }
 
     private void setUpWeightsManually() {

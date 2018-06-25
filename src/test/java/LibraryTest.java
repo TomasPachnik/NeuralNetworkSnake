@@ -58,6 +58,7 @@ public class LibraryTest {
         double[] a = new double[]{0.01,0.99};
         double[] b = new double[]{0.75136507,0.772928465};
         System.out.println(Util.squaredError(a, b));
+        System.out.println(Util.outputInput(0.7513650695523157));
     }
 
 }

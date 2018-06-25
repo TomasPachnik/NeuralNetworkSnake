@@ -13,7 +13,10 @@ public class Main {
         output[0] = .01;
         output[1] = .99;
 
-        network.teach(input, output);
+        for (int i = 0; i < 10000; i++) {
+            network.teach(input, output);
+        }
+
         System.out.println();
     }
 }
