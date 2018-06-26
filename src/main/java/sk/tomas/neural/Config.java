@@ -1,8 +1,10 @@
 package sk.tomas.neural;
 
-public class Config {
+import java.io.Serializable;
 
-    static final int[] networkSize = {12, 16, 4};
-    static final double learningRate = 0.25;
+public class Config implements Serializable {
+
+    static final int[] networkSize = {12, 8, 4};
+    static final double learningRate = 0.5;
 
 }

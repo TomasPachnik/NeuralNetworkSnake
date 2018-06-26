@@ -1,9 +1,10 @@
 package sk.tomas.neural;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NetworkImpl implements Network {
+public class NetworkImpl implements Network, Serializable {
 
     private List<List<Neural>> network;
 
@@ -61,7 +62,7 @@ public class NetworkImpl implements Network {
     public double[] teach(double[] input, double[] expected) throws InputException {
         double[] run = run(input);
         backPropagation(expected);
-        System.out.println(Util.squaredError(expected, run)*100);
+        //System.out.println(Util.squaredError(expected, run)*100);
         return run;
     }
 
@@ -74,6 +75,17 @@ public class NetworkImpl implements Network {
             network.get(0).get(i).setLastValue(input[i]);
         }
         return run();
+    }
+
+    @Override
+    public void saveState(String filename) throws FileException {
+        Util.writeFile(filename, this);
+    }
+
+    @Override
+    public void loadState(String filename) throws FileException {
+        NetworkImpl obj = (NetworkImpl) Util.readFile(filename);
+        network = obj.getNetwork();
     }
 
     private double[] run() {
@@ -165,4 +177,7 @@ public class NetworkImpl implements Network {
         network.get(2).get(1).getInputs().get(2).setW(0.6);
     }
 
+    public List<List<Neural>> getNetwork() {
+        return network;
+    }
 }

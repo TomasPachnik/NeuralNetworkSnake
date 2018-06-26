@@ -9,7 +9,6 @@ public class Core implements Control, Serializable {
 
     private int defaultGridHeight = 20;
     private int defaultGridWidth = 10;
-    private int defaultSnakeLength = 3;
     private List<Direction> lastMovements;
 
     private boolean printMove = true;
@@ -63,18 +62,17 @@ public class Core implements Control, Serializable {
     private void recalculateScore() {
         if (appleJustEaten) {
             appleJustEaten = false;
-            calculateAppleDistance();
-        } else {
-            int temp = calculateAppleDistance();
-            if (appleDistance > temp) {
-                increaseScore();
-            } else {
-                if (appleDistance < temp) {
-                    decreaseScore();
-                }
-            }
-            appleDistance = temp;
         }
+        int temp = calculateAppleDistance();
+        if (appleDistance > temp) {
+            increaseScore();
+        } else {
+            if (appleDistance < temp) {
+                decreaseScore();
+            }
+        }
+        appleDistance = temp;
+
     }
 
     private void printScore() {

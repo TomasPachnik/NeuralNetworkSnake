@@ -6,4 +6,8 @@ public interface Network {
 
     double[] run(double[] input) throws InputException;
 
+    void saveState(String filename) throws FileException;
+
+    void loadState(String filename) throws FileException;
+
 }
