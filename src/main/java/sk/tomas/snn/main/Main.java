@@ -13,9 +13,9 @@ public class Main {
     }
 
     static void teach() throws FileException, InputException {
-        Network network = new NetworkImpl();
+        Network network = new NetworkImpl(12,8,4,0.25);
         String filename = "snake";
-        network.loadState(filename);
+        //network.loadState(filename);
         int max = 100000;
         for (int i = 0; i < max; i++) {
             System.out.println(i);
@@ -42,7 +42,7 @@ public class Main {
     }
 
     static void run() throws InputException, FileException, InterruptedException {
-        Network network = new NetworkImpl();
+        Network network = new NetworkImpl(12,8,4,0.25);
         String filename = "snake";
         network.loadState(filename);
         int max = 1000;

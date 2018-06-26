@@ -6,9 +6,14 @@ import java.util.List;
 
 public class NetworkImpl implements Network, Serializable {
 
+    private int[] networkSize;
+    private double learningRate;
+
     private List<List<Neural>> network;
 
-    public NetworkImpl() {
+    public NetworkImpl(int inputLayer, int hiddenLayer, int outpuLayer, double learningRate) {
+        this.networkSize = new int[]{inputLayer, hiddenLayer, outpuLayer};
+        this.learningRate = learningRate;
         init();
         randomizeWeights();
         addBias();
@@ -16,15 +21,15 @@ public class NetworkImpl implements Network, Serializable {
 
     private void init() {
         network = new ArrayList<>();
-        for (int i = 0; i < Config.networkSize.length; i++) {
+        for (int i = 0; i < networkSize.length; i++) {
             List<Neural> layer = new ArrayList<>();
-            for (int j = 0; j < Config.networkSize[i]; j++) {
+            for (int j = 0; j < networkSize[i]; j++) {
                 //input layer does not have ancestors
                 List<NeuralInput> neuralInputs = new ArrayList<>();
                 if (i < 1) {
                     neuralInputs.add(new NeuralInput(null));
                 } else {
-                    for (int k = 0; k < Config.networkSize[i - 1]; k++) {
+                    for (int k = 0; k < networkSize[i - 1]; k++) {
                         neuralInputs.add(new NeuralInput(network.get(i - 1).get(k)));
                     }
                 }
@@ -43,7 +48,7 @@ public class NetworkImpl implements Network, Serializable {
     }
 
     private void addBias() {
-        for (int i = 1; i < Config.networkSize.length; i++) {
+        for (int i = 1; i < networkSize.length; i++) {
             addBias(i);
         }
     }
@@ -68,7 +73,7 @@ public class NetworkImpl implements Network, Serializable {
 
     @Override
     public double[] run(double[] input) throws InputException {
-        if (Config.networkSize[0] != input.length) {
+        if (networkSize[0] != input.length) {
             throw new InputException("wrong input length");
         }
         for (int i = 0; i < network.get(0).size(); i++) {
@@ -97,7 +102,7 @@ public class NetworkImpl implements Network, Serializable {
                 neural.forwardPropagation();
             }
         }
-        double[] result = new double[Config.networkSize[Config.networkSize.length - 1]];
+        double[] result = new double[networkSize[networkSize.length - 1]];
         for (int i = 0; i < result.length; i++) {
             result[i] = network.get(network.size() - 1).get(i).getLastValue();
         }
@@ -112,7 +117,7 @@ public class NetworkImpl implements Network, Serializable {
             for (NeuralInput input : neural.getInputs()) {
                 if (!input.getAncestor().isBias()) {
                     double temp = Util.errorAffect(expected[i], neural.getLastValue(), input.getAncestor().getLastValue());
-                    lastLayer.add(Util.calculateNewWeight(input.getW(), Config.learningRate, temp));
+                    lastLayer.add(Util.calculateNewWeight(input.getW(), learningRate, temp));
                 }
             }
         }
@@ -124,7 +129,7 @@ public class NetworkImpl implements Network, Serializable {
             for (NeuralInput input : neural.getInputs()) {
                 if (!input.getAncestor().isBias()) {
                     double temp = Util.errorAffectWithMistake(mistake, neural.getLastValue(), input.getAncestor().getLastValue());
-                    hiddenLayer.add(Util.calculateNewWeight(input.getW(), Config.learningRate, temp));
+                    hiddenLayer.add(Util.calculateNewWeight(input.getW(), learningRate, temp));
                 }
             }
         }
@@ -160,24 +165,8 @@ public class NetworkImpl implements Network, Serializable {
         return count;
     }
 
-    private void setUpWeightsManually() {
-        network.get(1).get(0).getInputs().get(0).setW(0.15);
-        network.get(1).get(0).getInputs().get(1).setW(0.2);
-        network.get(1).get(1).getInputs().get(0).setW(0.25);
-        network.get(1).get(1).getInputs().get(1).setW(0.3);
 
-        network.get(2).get(0).getInputs().get(0).setW(0.4);
-        network.get(2).get(0).getInputs().get(1).setW(0.45);
-        network.get(2).get(1).getInputs().get(0).setW(0.5);
-        network.get(2).get(1).getInputs().get(1).setW(0.55);
-
-        network.get(1).get(0).getInputs().get(2).setW(0.35);
-        network.get(1).get(1).getInputs().get(2).setW(0.35);
-        network.get(2).get(0).getInputs().get(2).setW(0.6);
-        network.get(2).get(1).getInputs().get(2).setW(0.6);
-    }
-
-    public List<List<Neural>> getNetwork() {
+    private List<List<Neural>> getNetwork() {
         return network;
     }
 }
