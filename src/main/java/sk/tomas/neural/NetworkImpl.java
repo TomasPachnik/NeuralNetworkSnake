@@ -67,7 +67,7 @@ public class NetworkImpl implements Network, Serializable {
     public double[] teach(double[] input, double[] expected) throws InputException {
         double[] run = run(input);
         backPropagation(expected);
-        //System.out.println(Util.squaredError(expected, run) * 100);
+        //System.out.println(Util.squaredError(expected, run)*100);
         return run;
     }
 
@@ -91,11 +91,6 @@ public class NetworkImpl implements Network, Serializable {
     public void loadState(String filename) throws FileException {
         NetworkImpl obj = (NetworkImpl) Util.readFile(filename);
         network = obj.getNetwork();
-    }
-
-    @Override
-    public Network getClone() {
-        return (Network) Util.clone(this);
     }
 
     private double[] run() {

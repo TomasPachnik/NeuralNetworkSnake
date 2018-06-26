@@ -4,40 +4,32 @@ public interface Snake {
 
     boolean move(Direction direction);
 
-    boolean move(double[] array);
-
-    boolean move(double left, double forward, double right);
-
     int getScore();
-
-    double [] directionToArray(Direction direction);
 
     Direction calculateBestMove();
 
-    int wallLeft();
+     int wallLeft();
 
-    int wallRight();
+     int wallRight();
 
-    int wallUp();
+     int wallUp();
 
-    int wallDown();
+     int wallDown();
 
-    int appleLeft();
+     int appleLeft();
 
-    int appleRight();
+     int appleRight();
 
-    int appleUp();
+     int appleUp();
 
-    int appleDown();
+     int appleDown();
 
-    int bodyLeft();
+     int bodyLeft();
 
-    int bodyRight();
+     int bodyRight();
 
-    int bodyUp();
+     int bodyUp();
 
-    int bodyDown();
-
-    double[] output();
+     int bodyDown();
 
 }

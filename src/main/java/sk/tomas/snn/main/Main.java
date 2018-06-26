@@ -1,55 +1,63 @@
 package sk.tomas.snn.main;
 
-import sk.tomas.neural.FileException;
-import sk.tomas.neural.InputException;
-import sk.tomas.neural.Network;
-import sk.tomas.neural.NetworkImpl;
-import sk.tomas.snake.Direction;
+import sk.tomas.neural.*;
 import sk.tomas.snake.Snake;
 import sk.tomas.snake.SnakeImpl;
+import sk.tomas.snake.Direction;
+import sk.tomas.snn.func.Func;
 
 public class Main {
 
     public static void main(String[] args) throws InputException, FileException, InterruptedException {
-        teach();
+        run();
     }
 
-    private static void teach() throws FileException, InputException, InterruptedException {
-        Network network = new NetworkImpl(9, 12, 3, 0.25);
+    private static void teach() throws FileException, InputException {
+        Network network = new NetworkImpl(12, 8, 4, 0.25);
         String filename = "snake";
         //network.loadState(filename);
-        int max = 100;
+        int max = 100000;
         for (int i = 0; i < max; i++) {
             System.out.println(i);
             boolean alive = true;
             Snake snake = new SnakeImpl();
-            //((SnakeImpl) snake).setPrintMove(false);
+            ((SnakeImpl) snake).setPrintMove(false);
 
             while (alive) {
                 Direction bestMove = snake.calculateBestMove();
-               // System.out.println(bestMove);
-                double[] move = network.teach(snake.output(), snake.directionToArray(bestMove));
-                alive = snake.move(move);
-                Thread.sleep(400);
+
+                double input[] = new double[]{snake.wallUp(), snake.wallDown(), snake.wallLeft(), snake.wallRight(),
+                        snake.appleUp(), snake.appleDown(), snake.appleLeft(), snake.appleRight(),
+                        snake.bodyUp(), snake.bodyDown(), snake.bodyLeft(), snake.bodyRight()};
+
+                double[] move = network.teach(Util.simplify(input), Func.expected(bestMove));
+
+                Direction neuralMove = Func.calcDirection(move);
+                alive = snake.move(neuralMove);
             }
-            if (i % (max / 100) == 0) {
+            if (i % (max / 1000) == 0) {
                 network.saveState(filename);
             }
         }
     }
 
     private static void run() throws InputException, FileException, InterruptedException {
-        Network network = new NetworkImpl(9, 6, 3, 0.25);
+        Network network = new NetworkImpl(12, 8, 4, 0.25);
         String filename = "snake";
-       // network.loadState(filename);
+        network.loadState(filename);
         int max = 1000;
         for (int i = 0; i < max; i++) {
             boolean alive = true;
             Snake snake = new SnakeImpl();
+
             while (alive) {
-                double[] move = network.run(snake.output());
-                alive = snake.move(move);
-                Thread.sleep(400);
+                double input[] = new double[]{snake.wallUp(), snake.wallDown(), snake.wallLeft(), snake.wallRight(),
+                        snake.appleUp(), snake.appleDown(), snake.appleLeft(), snake.appleRight(),
+                        snake.bodyUp(), snake.bodyDown(), snake.bodyLeft(), snake.bodyRight()};
+
+                double[] move = network.run(Util.simplify(input));
+                alive = snake.move(Func.calcDirection(move));
+                Thread.sleep(200);
             }
         }
     }

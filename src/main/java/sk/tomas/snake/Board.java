@@ -1,5 +1,7 @@
 package sk.tomas.snake;
 
+import sk.tomas.neural.Config;
+
 import java.io.Serializable;
 
 class Board implements Serializable {
