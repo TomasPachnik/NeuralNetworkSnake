@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Core implements Control, Serializable {
+public class SnakeImpl implements Snake, Serializable {
 
     private int defaultGridHeight = 20;
     private int defaultGridWidth = 10;
@@ -16,7 +16,7 @@ public class Core implements Control, Serializable {
     private int appleDistance;
     private boolean appleJustEaten = false;
 
-    private Snake snake;
+    private Body body;
     private Board board;
     private Node applePosition;
 
@@ -35,12 +35,12 @@ public class Core implements Control, Serializable {
         score += 20;
     }
 
-    public Core() {
+    public SnakeImpl() {
         lastMovements = new ArrayList<>();
         randomX = new Random();
         randomY = new Random();
         board = new Board(defaultGridWidth, defaultGridHeight);
-        snake = new Snake(this, board, board.getAtPosition(defaultGridWidth / 2, defaultGridHeight / 2));
+        body = new Body(this, board, board.getAtPosition(defaultGridWidth / 2, defaultGridHeight / 2));
         setAppleAtRandomPosition(true);
         score = 0;
         appleDistance = calculateAppleDistance();
@@ -49,7 +49,7 @@ public class Core implements Control, Serializable {
 
     @Override
     public boolean move(Direction direction) {
-        boolean move = snake.move(direction);
+        boolean move = body.move(direction);
 
         recalculateScore();
 
@@ -92,8 +92,8 @@ public class Core implements Control, Serializable {
     }
 
     private int calculateAppleDistance() {
-        int x = Math.abs(snake.getHead().getX() - applePosition.getX());
-        int y = Math.abs(snake.getHead().getY() - applePosition.getY());
+        int x = Math.abs(body.getHead().getX() - applePosition.getX());
+        int y = Math.abs(body.getHead().getY() - applePosition.getY());
         return x + y;
     }
 
@@ -109,10 +109,10 @@ public class Core implements Control, Serializable {
     public Direction calculateBestMove() {
         int temp = Integer.MIN_VALUE;
         Direction result = Direction.UP;
-        Core clone1 = (Core) Func.clone(this);
-        Core clone2 = (Core) Func.clone(this);
-        Core clone3 = (Core) Func.clone(this);
-        Core clone4 = (Core) Func.clone(this);
+        SnakeImpl clone1 = (SnakeImpl) Func.clone(this);
+        SnakeImpl clone2 = (SnakeImpl) Func.clone(this);
+        SnakeImpl clone3 = (SnakeImpl) Func.clone(this);
+        SnakeImpl clone4 = (SnakeImpl) Func.clone(this);
 
         clone1.setPrintMove(false);
         clone2.setPrintMove(false);
@@ -147,62 +147,62 @@ public class Core implements Control, Serializable {
 
     @Override
     public int wallLeft() {
-        return snake.wallLeft();
+        return body.wallLeft();
     }
 
     @Override
     public int wallRight() {
-        return snake.wallRight();
+        return body.wallRight();
     }
 
     @Override
     public int wallUp() {
-        return snake.wallUp();
+        return body.wallUp();
     }
 
     @Override
     public int wallDown() {
-        return snake.wallDown();
+        return body.wallDown();
     }
 
     @Override
     public int appleLeft() {
-        return snake.appleLeft();
+        return body.appleLeft();
     }
 
     @Override
     public int appleRight() {
-        return snake.appleRight();
+        return body.appleRight();
     }
 
     @Override
     public int appleUp() {
-        return snake.appleUp();
+        return body.appleUp();
     }
 
     @Override
     public int appleDown() {
-        return snake.appleDown();
+        return body.appleDown();
     }
 
     @Override
     public int bodyLeft() {
-        return snake.bodyLeft();
+        return body.bodyLeft();
     }
 
     @Override
     public int bodyRight() {
-        return snake.bodyRight();
+        return body.bodyRight();
     }
 
     @Override
     public int bodyUp() {
-        return snake.bodyUp();
+        return body.bodyUp();
     }
 
     @Override
     public int bodyDown() {
-        return snake.bodyDown();
+        return body.bodyDown();
     }
 
     public Node getApplePosition() {

@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Control app = new Core();
+        Snake app = new SnakeImpl();
         Scanner keyboard = new Scanner(System.in);
         boolean exit = false;
         while (!exit) {

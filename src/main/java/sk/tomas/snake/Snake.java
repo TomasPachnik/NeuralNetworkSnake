@@ -1,6 +1,6 @@
 package sk.tomas.snake;
 
-public interface Control {
+public interface Snake {
 
     boolean move(Direction direction);
 

@@ -4,13 +4,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-class Snake implements Serializable {
+class Body implements Serializable {
 
     private List<Node> body;
     private Board board;
-    private Core core;
+    private SnakeImpl core;
 
-    Snake(Core core, Board board, Node head) {
+    Body(SnakeImpl core, Board board, Node head) {
         this.board = board;
         this.core = core;
         body = new ArrayList<>();

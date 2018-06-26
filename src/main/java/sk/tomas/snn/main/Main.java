@@ -1,8 +1,8 @@
 package sk.tomas.snn.main;
 
 import sk.tomas.neural.*;
-import sk.tomas.snake.Control;
-import sk.tomas.snake.Core;
+import sk.tomas.snake.Snake;
+import sk.tomas.snake.SnakeImpl;
 import sk.tomas.snake.Direction;
 import sk.tomas.snn.func.Func;
 
@@ -12,16 +12,16 @@ public class Main {
         run();
     }
 
-    static void teach() throws FileException, InputException {
-        Network network = new NetworkImpl(12,8,4,0.25);
+    private static void teach() throws FileException, InputException {
+        Network network = new NetworkImpl(12, 8, 4, 0.25);
         String filename = "snake";
         //network.loadState(filename);
         int max = 100000;
         for (int i = 0; i < max; i++) {
             System.out.println(i);
             boolean alive = true;
-            Control snake = new Core();
-            ((Core) snake).setPrintMove(false);
+            Snake snake = new SnakeImpl();
+            ((SnakeImpl) snake).setPrintMove(false);
 
             while (alive) {
                 Direction bestMove = snake.calculateBestMove();
@@ -41,14 +41,14 @@ public class Main {
         }
     }
 
-    static void run() throws InputException, FileException, InterruptedException {
-        Network network = new NetworkImpl(12,8,4,0.25);
+    private static void run() throws InputException, FileException, InterruptedException {
+        Network network = new NetworkImpl(12, 8, 4, 0.25);
         String filename = "snake";
         network.loadState(filename);
         int max = 1000;
         for (int i = 0; i < max; i++) {
             boolean alive = true;
-            Control snake = new Core();
+            Snake snake = new SnakeImpl();
 
             while (alive) {
                 double input[] = new double[]{snake.wallUp(), snake.wallDown(), snake.wallLeft(), snake.wallRight(),
