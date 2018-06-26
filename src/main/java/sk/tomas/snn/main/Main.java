@@ -9,6 +9,7 @@ import sk.tomas.snn.func.Func;
 public class Main {
 
     public static void main(String[] args) throws InputException, FileException, InterruptedException {
+        teach();
         run();
     }
 
@@ -16,7 +17,7 @@ public class Main {
         Network network = new NetworkImpl(12, 8, 4, 0.25);
         String filename = "snake";
         //network.loadState(filename);
-        int max = 100000;
+        int max = 1000;
         for (int i = 0; i < max; i++) {
             System.out.println(i);
             boolean alive = true;
@@ -57,7 +58,7 @@ public class Main {
 
                 double[] move = network.run(Util.simplify(input));
                 alive = snake.move(Func.calcDirection(move));
-                Thread.sleep(200);
+                Thread.sleep(400);
             }
         }
     }

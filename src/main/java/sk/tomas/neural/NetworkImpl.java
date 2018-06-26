@@ -64,6 +64,11 @@ public class NetworkImpl implements Network, Serializable {
     }
 
     @Override
+    public Network getClone() {
+        return (Network) Util.clone(this);
+    }
+
+    @Override
     public double[] teach(double[] input, double[] expected) throws InputException {
         double[] run = run(input);
         backPropagation(expected);
