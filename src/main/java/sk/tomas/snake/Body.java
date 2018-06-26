@@ -17,9 +17,10 @@ class Body implements Serializable {
         head.setSnakeBody(true);
         head.setHead(true);
         body.add(0, head);
-        Node body1 = board.getAtPosition(head.getX(), head.getY() - 1);
-        body1.setSnakeBody(true);
-        body.add(body1);
+        Node neck = board.getAtPosition(head.getX(), head.getY() - 1);
+        neck.setSnakeBody(true);
+        neck.setNeck(true);
+        body.add(neck);
     }
 
     boolean move(Direction direction) {
@@ -28,37 +29,25 @@ class Body implements Serializable {
             case LEFT:
                 if (body.get(0).getY() > 0) {
                     temp = board.getAtPosition(body.get(0).getX(), body.get(0).getY() - 1);
-                    if (!temp.isSnakeBody()) {
-                        move(temp);
-                        return true;
-                    }
+                    return move(temp);
                 }
                 return false;
             case RIGHT:
                 if (body.get(0).getY() < board.getGridHeight() - 1) {
                     temp = board.getAtPosition(body.get(0).getX(), body.get(0).getY() + 1);
-                    if (!temp.isSnakeBody()) {
-                        move(temp);
-                        return true;
-                    }
+                    return move(temp);
                 }
                 return false;
             case UP:
                 if (body.get(0).getX() > 0) {
                     temp = board.getAtPosition(body.get(0).getX() - 1, body.get(0).getY());
-                    if (!temp.isSnakeBody()) {
-                        move(temp);
-                        return true;
-                    }
+                    return move(temp);
                 }
                 return false;
             case DOWN:
                 if (body.get(0).getX() < board.getGridWidth() - 1) {
                     temp = board.getAtPosition(body.get(0).getX() + 1, body.get(0).getY());
-                    if (!temp.isSnakeBody()) {
-                        move(temp);
-                        return true;
-                    }
+                    return move(temp);
                 }
                 return false;
         }
@@ -130,49 +119,29 @@ class Body implements Serializable {
     }
 
     int bodyLeft() {
-        int temp = getHead().getY() - 1;
-        while (temp >= 0) {
-            if (board.getAtPosition(getHead().getX(), temp).isSnakeBody()) {
-                return getHead().getY() - temp;
-            } else {
-                temp--;
-            }
+        if (getHead().getY() > 0 && board.getAtPosition(getHead().getX(), getHead().getY() - 1).isSnakeBody()) {
+            return 1;
         }
         return 0;
     }
 
     int bodyRight() {
-        int temp = getHead().getY() + 1;
-        while (temp < board.getGridHeight()) {
-            if (board.getAtPosition(getHead().getX(), temp).isSnakeBody()) {
-                return temp - getHead().getY();
-            } else {
-                temp++;
-            }
+        if (getHead().getY() < board.getGridHeight() - 1 && board.getAtPosition(getHead().getX(), getHead().getY() + 1).isSnakeBody()) {
+            return 1;
         }
         return 0;
     }
 
     int bodyUp() {
-        int temp = getHead().getX() - 1;
-        while (temp >= 0) {
-            if (board.getAtPosition(temp, getHead().getY()).isSnakeBody()) {
-                return getHead().getX() - temp;
-            } else {
-                temp--;
-            }
+        if (getHead().getX() > 0 && board.getAtPosition(getHead().getX() - 1, getHead().getY()).isSnakeBody()) {
+            return 1;
         }
         return 0;
     }
 
     int bodyDown() {
-        int temp = getHead().getX() + 1;
-        while (temp < board.getGridWidth()) {
-            if (board.getAtPosition(temp, getHead().getY()).isSnakeBody()) {
-                return temp - getHead().getX();
-            } else {
-                temp++;
-            }
+        if (getHead().getX() < board.getGridWidth() - 1 && board.getAtPosition(getHead().getX() + 1, getHead().getY()).isSnakeBody()) {
+            return 1;
         }
         return 0;
     }
@@ -181,14 +150,7 @@ class Body implements Serializable {
         return body.get(0);
     }
 
-    private void move(Node first) {
-        first.setSnakeBody(true);
-        first.setHead(true);
-        body.add(0, first);
-
-        if (body.size() > 1) {
-            body.get(1).setHead(false);
-        }
+    private boolean move(Node first) {
         if (first.isApple()) {
             first.setApple(false);
             core.setAppleAtRandomPosition(false);
@@ -198,6 +160,21 @@ class Body implements Serializable {
             last.setSnakeBody(false);
             body.remove(last);
         }
+        if (!first.isSnakeBody()) {
+            first.setSnakeBody(true);
+            first.setHead(true);
+            body.add(0, first);
+            body.get(1).setHead(false);
+            body.get(1).setNeck(true);
+            if (body.size() > 2) {
+                body.get(2).setNeck(false);
+            }
+            return true;
+        }
+        return false;
     }
 
+    List<Node> getBody() {
+        return body;
+    }
 }

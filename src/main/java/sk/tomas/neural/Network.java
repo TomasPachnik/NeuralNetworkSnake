@@ -10,4 +10,6 @@ public interface Network {
 
     void loadState(String filename) throws FileException;
 
+    Network getClone();
+
 }

@@ -2,9 +2,9 @@ package sk.tomas.snake;
 
 import java.io.*;
 
-public class Func {
+class Func {
 
-    public static Object clone(Object orig) {
+    static Object clone(Object orig) {
         Object obj = null;
         try {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();

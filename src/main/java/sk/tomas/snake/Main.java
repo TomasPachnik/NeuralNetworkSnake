@@ -8,7 +8,16 @@ public class Main {
         Scanner keyboard = new Scanner(System.in);
         boolean exit = false;
         while (!exit) {
-            System.out.println(app.calculateBestMove());
+            double move[] = app.output();
+            double hint[] = app.directionToArray(app.calculateBestMove());
+            for (double aMove : move) {
+                System.out.print(aMove + " ");
+            }
+            System.out.println();
+            for (double aHint : hint) {
+                System.out.print(aHint + " ");
+            }
+            System.out.println();
             String input = keyboard.nextLine();
             if (input != null) {
                 if ("p".equals(input)) {
@@ -16,19 +25,15 @@ public class Main {
                 } else
                     switch (input) {
                         case "w":
-                            exit = !app.move(Direction.UP);
+                            exit = !app.move(0, 1, 0);
                             break;
                         case "a":
-                            exit = !app.move(Direction.LEFT);
-                            break;
-                        case "s":
-                            exit = !app.move(Direction.DOWN);
+                            exit = !app.move(1, 0, 0);
                             break;
                         case "d":
-                            exit = !app.move(Direction.RIGHT);
+                            exit = !app.move(0, 0, 1);
                             break;
                     }
-
             }
         }
         keyboard.close();
