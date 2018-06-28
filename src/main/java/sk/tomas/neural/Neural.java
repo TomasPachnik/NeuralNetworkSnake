@@ -3,7 +3,7 @@ package sk.tomas.neural;
 import java.io.Serializable;
 import java.util.List;
 
-public class Neural implements Serializable {
+class Neural implements Serializable {
 
     private List<NeuralInput> inputs;
     private double lastValue;
@@ -33,11 +33,6 @@ public class Neural implements Serializable {
         inputs.add(neuralInput);
     }
 
-    //TODO implement
-    void backPropagation() {
-
-    }
-
     double getLastValue() {
         return lastValue;
     }
@@ -50,11 +45,11 @@ public class Neural implements Serializable {
         return inputs;
     }
 
-    public boolean isBias() {
+    boolean isBias() {
         return bias;
     }
 
-    public void setBias(boolean bias) {
-        this.bias = bias;
+    void setBias() {
+        this.bias = true;
     }
 }

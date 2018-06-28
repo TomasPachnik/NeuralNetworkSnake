@@ -1,11 +1,8 @@
 package sk.tomas.neural;
 
-public class FileException extends LogicException {
-    public FileException(String message) {
-        super(message);
-    }
+class FileException extends LogicException {
 
-    public FileException(Exception e) {
+    FileException(Exception e) {
         super(e);
     }
 }

@@ -1,12 +1,12 @@
 package sk.tomas.neural;
 
-public class LogicException extends Exception {
+class LogicException extends Exception {
 
-    public LogicException(String message) {
+    LogicException(String message) {
         super(message);
     }
 
-    public LogicException(Throwable cause) {
+    LogicException(Throwable cause) {
         super(cause);
     }
 }

@@ -1,8 +1,8 @@
 package sk.tomas.neural;
 
-public class InputException extends LogicException {
+class InputException extends LogicException {
 
-    public InputException(String message) {
+    InputException(String message) {
         super(message);
     }
 }

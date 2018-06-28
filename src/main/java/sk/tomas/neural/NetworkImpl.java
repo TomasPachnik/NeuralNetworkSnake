@@ -8,6 +8,8 @@ public class NetworkImpl implements Network, Serializable {
 
     private int[] networkSize;
     private double learningRate;
+    private double errorRate;
+    private int cycles;
 
     private List<List<Neural>> network;
 
@@ -55,12 +57,11 @@ public class NetworkImpl implements Network, Serializable {
 
     private void addBias(int layerNumber) {
         Neural bias = new Neural(new ArrayList<>());
-        bias.setBias(true);
+        bias.setBias();
         bias.setLastValue(1);
         for (Neural neural : network.get(layerNumber)) {
             neural.addBias(bias);
         }
-
     }
 
     @Override
@@ -69,10 +70,16 @@ public class NetworkImpl implements Network, Serializable {
     }
 
     @Override
+    public double getErrorRate() {
+        return errorRate / cycles;
+    }
+
+    @Override
     public double[] teach(double[] input, double[] expected) throws InputException {
         double[] run = run(input);
         backPropagation(expected);
-        //System.out.println(Util.squaredError(expected, run)*100);
+        cycles++;
+        errorRate += Util.squaredError(expected, run);
         return run;
     }
 
@@ -169,7 +176,6 @@ public class NetworkImpl implements Network, Serializable {
         }
         return count;
     }
-
 
     private List<List<Neural>> getNetwork() {
         return network;

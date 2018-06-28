@@ -12,5 +12,6 @@ public interface Network {
 
     Network getClone();
 
+    double getErrorRate();
 
 }
