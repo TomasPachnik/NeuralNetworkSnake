@@ -56,7 +56,7 @@ public class NetworkImpl implements Network, Serializable {
     }
 
     private void addBias(int layerNumber) {
-        Neural bias = new Neural(new ArrayList<>());
+        Neural bias = new Neural(new ArrayList<NeuralInput>());
         bias.setBias();
         bias.setLastValue(1);
         for (Neural neural : network.get(layerNumber)) {
