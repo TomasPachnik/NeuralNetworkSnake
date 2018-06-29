@@ -31,12 +31,13 @@ public class NeuralTests {
     }
 
     @Test
-    public void loadSaveTest() {
+    public void loadSaveDeleteTest() {
         String filename = "loadSaveTest";
         Network network = new NetworkImpl(4, 2, 1, 0.4);
         try {
             network.saveState(filename);
             network.loadState(filename);
+            network.deleteState(filename);
         } catch (FileException e) {
             Assert.fail("Error loading or saving file: " + e.getMessage());
         }
