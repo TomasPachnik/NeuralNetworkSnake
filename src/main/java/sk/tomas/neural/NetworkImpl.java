@@ -70,8 +70,18 @@ public class NetworkImpl implements Network, Serializable {
     }
 
     @Override
-    public double getErrorRate() {
+    public double errorRate() {
         return errorRate / cycles;
+    }
+
+    @Override
+    public double getWeight(int fromLayer, int fromIndex, int ancestorIndex) {
+        return network.get(fromLayer).get(fromIndex).getInputs().get(ancestorIndex).getW();
+    }
+
+    @Override
+    public void setWeight(int fromLayer, int fromIndex, int ancestorIndex, double value) {
+        network.get(fromLayer).get(fromIndex).getInputs().get(ancestorIndex).setW(value);
     }
 
     @Override
@@ -103,6 +113,11 @@ public class NetworkImpl implements Network, Serializable {
     public void loadState(String filename) throws FileException {
         NetworkImpl obj = (NetworkImpl) Util.readFile(filename);
         network = obj.getNetwork();
+    }
+
+    @Override
+    public boolean deleteState(String filename) {
+        return Util.deleteFile(filename);
     }
 
     private double[] run() {

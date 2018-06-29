@@ -123,4 +123,8 @@ public class Util {
         return obj;
     }
 
+    static boolean deleteFile(String filename) {
+        File file = new File(filename + ".dat");
+        return file.delete();
+    }
 }

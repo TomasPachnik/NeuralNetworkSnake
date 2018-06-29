@@ -26,7 +26,7 @@ public class NeuralTests {
             }
             network.teach(input, expected);
         }
-        double errorRate = network.getErrorRate();
+        double errorRate = network.errorRate();
         Assert.assertTrue("Expected mistake <0.05, actually it was: " + errorRate, errorRate < 0.05);
     }
 

@@ -10,8 +10,14 @@ public interface Network {
 
     void loadState(String filename) throws FileException;
 
+    boolean deleteState(String filename);
+
     Network getClone();
 
-    double getErrorRate();
+    double errorRate();
+
+    double getWeight(int fromLayer, int fromIndex, int ancestorIndex);
+
+    void setWeight(int  fromLayer, int fromIndex, int ancestorIndex, double value);
 
 }
