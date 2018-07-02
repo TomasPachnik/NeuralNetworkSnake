@@ -70,7 +70,9 @@ public class Genetic {
                 if (mutationRandom.nextDouble() < MUTATION_RATE) {
                     weight = network.getWeight(bottomLayerDeep, i, j);
                     weight += Util.normalDistributionForMutation();
-                    network.setWeight(bottomLayerDeep, i, j, weight);
+                    if (weight >= -1 && weight <= 1) {
+                        network.setWeight(bottomLayerDeep, i, j, weight);
+                    }
                 }
             }
         }
