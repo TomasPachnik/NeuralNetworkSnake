@@ -1,5 +1,6 @@
 package sk.tomas.ga;
 
+import sk.tomas.neural.InputException;
 import sk.tomas.neural.Network;
 
 import java.util.Random;
@@ -8,38 +9,77 @@ public class Genetic {
 
     private final double CROSS_RATE = 0.7; //crossing probability 0.7 - 1.0
     private final double MUTATION_RATE = 0.05; //mutation of each gene probability
-    private final int POPULATION_SIZE = 80; //number of individuals in population
+    private final int POPULATION_SIZE = 50; //number of individuals in population
     private final int HIDDEN_LAYER_DEEP = 1;
     private final int OUTPUT_LAYER_DEEP = 2;
 
     private Population population;
 
-    private void fitness() {
+    public void run() throws InputException {
+        Random crossingRandom = new Random();
+        Random parentRandom = new Random();
+        Random selectionRandom = new Random();
+        Random mutationRandom = new Random();
 
+
+        Double bestScore = 0d;
+        Population newPopulation;
+        while (bestScore < 50) {
+            newPopulation = new Population();
+
+            if (population == null) { //population zero
+                population = new Population(POPULATION_SIZE, 4, 2, 1);
+            }
+
+            population.execute();//calculate fitness of each individual
+
+            //TODO subtract from all fitnesses value of individual with minimal fitness value -> this individual will never be picked up
+
+            //crossing
+            for (int i = 0; i < POPULATION_SIZE / 2; i++) {
+                Network parent1 = selection(population, selectionRandom); //selection
+                Network parent2 = selection(population, selectionRandom); //selection
+                Network[] children = cross(parent1, parent2, crossingRandom, parentRandom);
+                newPopulation.getPopulation().add(new Individual(children[0]));
+                newPopulation.getPopulation().add(new Individual(children[1]));
+            }
+
+            //mutation
+            for (Individual individual : population.getPopulation()) {
+                mutate(individual.getNetwork(), mutationRandom);
+            }
+
+            bestScore = population.getBest().getFitness();
+            newPopulation.getPopulation().set(0, population.getBest()); //elitism
+            population = newPopulation;
+            System.out.println(bestScore);
+        }
     }
 
     //roulette selection algorithm
-    private Network selection(Population population, double sumFitness, Random selectionRandom) {
+    private Network selection(Population population, Random selectionRandom) {
         double sum = 0;
-        double fitnessPoint = selectionRandom.nextDouble() * sumFitness;
+        double fitnessPoint = selectionRandom.nextDouble() * population.getSumFitness();
         for (Individual individual : population.getPopulation()) {
             sum += individual.getFitness();
             if (sum > fitnessPoint) {
                 return individual.getNetwork();
             }
         }
-        return null;
+        throw new RuntimeException("wrong selection -> this should not happen at all");
     }
 
-    private Network cross(Network parent1, Network parent2, Random crossingRandom, Random parentRandom) {
-        Network child = parent1.getClone();
+    private Network[] cross(Network parent1, Network parent2, Random crossingRandom, Random parentRandom) {
+        Network child1 = parent1.getClone();
+        Network child2 = parent1.getClone();
+        Network[] children = new Network[]{child1, child2};
 
         if (crossingRandom.nextDouble() < CROSS_RATE) {
-            child = cross(parent1, parent2, child, parent1.getHiddenLayer(), parent1.getInputLayer(), HIDDEN_LAYER_DEEP, parentRandom);
-            child = cross(parent1, parent2, child, parent1.getOutputLayer(), parent1.getHiddenLayer(), OUTPUT_LAYER_DEEP, parentRandom);
+            children = cross(parent1, parent2, children, parent1.getHiddenLayer(), parent1.getInputLayer(), HIDDEN_LAYER_DEEP, parentRandom);
+            children = cross(parent1, parent2, children, parent1.getOutputLayer(), parent1.getHiddenLayer(), OUTPUT_LAYER_DEEP, parentRandom);
         }
 
-        return child;
+        return children;
     }
 
     private Network mutate(Network network, Random mutationRandom) {
@@ -50,17 +90,19 @@ public class Genetic {
         return network;
     }
 
-    private Network cross(Network parent1, Network parent2, Network child, int bottomLayer, int upperLayer, int bottomLayerDeep, Random parentRandom) {
+    private Network[] cross(Network parent1, Network parent2, Network[] children, int bottomLayer, int upperLayer, int bottomLayerDeep, Random parentRandom) {
         for (int i = 0; i < bottomLayer; i++) {
             for (int j = 0; j < upperLayer; j++) {
                 if (parentRandom.nextBoolean()) { //get from parent1
-                    child.setWeight(bottomLayerDeep, i, j, parent1.getWeight(bottomLayerDeep, i, j));
+                    children[0].setWeight(bottomLayerDeep, i, j, parent1.getWeight(bottomLayerDeep, i, j));
+                    children[1].setWeight(bottomLayerDeep, i, j, parent2.getWeight(bottomLayerDeep, i, j));
                 } else { //get from parent2
-                    child.setWeight(bottomLayerDeep, i, j, parent2.getWeight(bottomLayerDeep, i, j));
+                    children[0].setWeight(bottomLayerDeep, i, j, parent2.getWeight(bottomLayerDeep, i, j));
+                    children[1].setWeight(bottomLayerDeep, i, j, parent1.getWeight(bottomLayerDeep, i, j));
                 }
             }
         }
-        return child;
+        return children;
     }
 
     private Network mutate(Network network, int bottomLayer, int upperLayer, int bottomLayerDeep, Random mutationRandom) {

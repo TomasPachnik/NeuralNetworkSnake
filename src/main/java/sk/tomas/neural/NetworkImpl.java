@@ -16,6 +16,16 @@ public class NetworkImpl implements Network, Serializable {
 
     private List<List<Neural>> network;
 
+    public NetworkImpl(int inputLayer, int hiddenLayer, int outputLayer) {
+        this.networkSize = new int[]{inputLayer, hiddenLayer, outputLayer};
+        this.inputLayer = inputLayer;
+        this.hiddenLayer = hiddenLayer;
+        this.outputLayer = outputLayer;
+        init();
+        randomizeWeights();
+        addBias();
+    }
+
     public NetworkImpl(int inputLayer, int hiddenLayer, int outputLayer, double learningRate) {
         this.networkSize = new int[]{inputLayer, hiddenLayer, outputLayer};
         this.learningRate = learningRate;
