@@ -1,7 +1,6 @@
 package sk.tomas.ga;
 
 import sk.tomas.neural.Network;
-import sk.tomas.neural.NetworkImpl;
 
 import java.util.Random;
 
@@ -19,6 +18,7 @@ public class Genetic {
 
     }
 
+    //roulette selection algorithm
     private Network selection(Population population, double sumFitness, Random selectionRandom) {
         double sum = 0;
         double fitnessPoint = selectionRandom.nextDouble() * sumFitness;
@@ -32,10 +32,12 @@ public class Genetic {
     }
 
     private Network cross(Network parent1, Network parent2, Random crossingRandom, Random parentRandom) {
-        Network child = new NetworkImpl(parent1.getInputLayer(), parent1.getHiddenLayer(), parent1.getOutputLayer(), parent1.getLearningRate());
+        Network child = parent1.getClone();
 
-        child = cross(parent1, parent2, child, parent1.getHiddenLayer(), parent1.getInputLayer(), HIDDEN_LAYER_DEEP, crossingRandom, parentRandom);
-        child = cross(parent1, parent2, child, parent1.getOutputLayer(), parent1.getHiddenLayer(), OUTPUT_LAYER_DEEP, crossingRandom, parentRandom);
+        if (crossingRandom.nextDouble() < CROSS_RATE) {
+            child = cross(parent1, parent2, child, parent1.getHiddenLayer(), parent1.getInputLayer(), HIDDEN_LAYER_DEEP, parentRandom);
+            child = cross(parent1, parent2, child, parent1.getOutputLayer(), parent1.getHiddenLayer(), OUTPUT_LAYER_DEEP, parentRandom);
+        }
 
         return child;
     }
@@ -48,15 +50,13 @@ public class Genetic {
         return network;
     }
 
-    private Network cross(Network parent1, Network parent2, Network child, int bottomLayer, int upperLayer, int bottomLayerDeep, Random crossingRandom, Random parentRandom) {
+    private Network cross(Network parent1, Network parent2, Network child, int bottomLayer, int upperLayer, int bottomLayerDeep, Random parentRandom) {
         for (int i = 0; i < bottomLayer; i++) {
             for (int j = 0; j < upperLayer; j++) {
-                if (crossingRandom.nextDouble() < CROSS_RATE) {
-                    if (parentRandom.nextBoolean()) { //get from parent1
-                        child.setWeight(bottomLayerDeep, i, j, parent1.getWeight(bottomLayerDeep, i, j));
-                    } else { //get from parent2
-                        child.setWeight(bottomLayerDeep, i, j, parent2.getWeight(bottomLayerDeep, i, j));
-                    }
+                if (parentRandom.nextBoolean()) { //get from parent1
+                    child.setWeight(bottomLayerDeep, i, j, parent1.getWeight(bottomLayerDeep, i, j));
+                } else { //get from parent2
+                    child.setWeight(bottomLayerDeep, i, j, parent2.getWeight(bottomLayerDeep, i, j));
                 }
             }
         }
@@ -64,10 +64,11 @@ public class Genetic {
     }
 
     private Network mutate(Network network, int bottomLayer, int upperLayer, int bottomLayerDeep, Random mutationRandom) {
+        double weight;
         for (int i = 0; i < bottomLayer; i++) {
             for (int j = 0; j < upperLayer; j++) {
                 if (mutationRandom.nextDouble() < MUTATION_RATE) {
-                    double weight = network.getWeight(bottomLayerDeep, i, j);
+                    weight = network.getWeight(bottomLayerDeep, i, j);
                     weight += Util.normalDistributionForMutation();
                     network.setWeight(bottomLayerDeep, i, j, weight);
                 }
