@@ -8,7 +8,7 @@ import java.util.Random;
 class Individual {
 
     private Network network;
-    private double sumScore; //sum of network scores
+    private double sumScore = 10; //sum of network scores
     private int runs; //number of network calculations
 
     public Individual(Network network) {
@@ -27,7 +27,7 @@ class Individual {
         return network;
     }
 
-    public void run() throws InputException {
+    void run() throws InputException {
         Random random = new Random();
         double[] input = new double[network.getInputLayer()];
         for (int i = 0; i < input.length; i++) {
@@ -35,23 +35,16 @@ class Individual {
                 input[i] = 1;
             }
         }
-        double[] output = network.run(input);
-        rate(input, output);
+        rate(input, network.run(input));
         runs++;
     }
 
     private void rate(double[] input, double[] output) {
-        if (input[0] == 0 && input[1] == 0 && output[0] < 0.5) {
-            sumScore += 10;
-        }
-        if (input[0] == 0 && input[1] == 0 && output[0] < 0.5) {
-            sumScore += 10;
+        if (input[0] == 0 && input[1] == 1 && output[0] < 0.5) {
+            sumScore += 1000 * (0.5 - output[0]);
         }
         if (input[0] == 1 && input[1] == 0 && output[0] > 0.5) {
-            sumScore += 10;
-        }
-        if (input[0] == 1 && input[1] == 1 && output[0] > 0.5) {
-            sumScore += 10;
+            sumScore += 1000 * (output[0] - 0.5);
         }
     }
 

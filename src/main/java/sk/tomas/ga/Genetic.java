@@ -9,7 +9,7 @@ public class Genetic {
 
     private final double CROSS_RATE = 0.7; //crossing probability 0.7 - 1.0
     private final double MUTATION_RATE = 0.05; //mutation of each gene probability
-    private final int POPULATION_SIZE = 20; //number of individuals in population
+    private final int POPULATION_SIZE = 50; //number of individuals in population
     private final int HIDDEN_LAYER_DEEP = 1;
     private final int OUTPUT_LAYER_DEEP = 2;
 
@@ -24,7 +24,7 @@ public class Genetic {
 
         double bestScore = 0;
         Population newPopulation;
-        while (bestScore < 20) {
+        while (bestScore < 200) {
 
             newPopulation = new Population();
 
@@ -37,12 +37,16 @@ public class Genetic {
 
             //crossing
             for (int i = 0; i < population.getPopulation().size() / 2; i++) {
-                Network parent1 = selection(population, selectionRandom); //selection
-                Network parent2 = selection(population, selectionRandom); //selection
-                Network[] children = cross(parent1, parent2, crossingRandom, parentRandom);
+                Individual parent1 = selection(population, selectionRandom); //selection
+                Individual parent2 = selection(population, selectionRandom); //selection
+                System.out.print(parent1.getFitness() + " " + parent1.getFitness() + " ");
+                Network[] children = cross(parent1.getNetwork(), parent2.getNetwork(), crossingRandom, parentRandom);
+                //children[0] = mutate(children[0], mutationRandom);
+                //children[1] = mutate(children[1], mutationRandom);
                 newPopulation.getPopulation().add(new Individual(children[0]));
                 newPopulation.getPopulation().add(new Individual(children[1]));
             }
+            System.out.println();
 
             //mutation
             for (Individual individual : newPopulation.getPopulation()) {
@@ -56,16 +60,25 @@ public class Genetic {
             newPopulation.getPopulation().set(0, population.getBest()); //elitism
             population = newPopulation;
         }
+        Network best = population.getBest().getNetwork();
+
+        double[] input1 = new double[]{0, 1};
+        double[] input2 = new double[]{1, 0};
+
+        System.out.println();
+        System.out.println(best.run(input1)[0]);
+        System.out.println(best.run(input2)[0]);
+
     }
 
     //roulette selection algorithm
-    private Network selection(Population population, Random selectionRandom) {
+    private Individual selection(Population population, Random selectionRandom) {
         double sum = 0;
         double fitnessPoint = selectionRandom.nextDouble() * population.getSumFitness();
         for (Individual individual : population.getPopulation()) {
             sum += individual.getFitness();
             if (sum > fitnessPoint) {
-                return individual.getNetwork();
+                return individual;
             }
         }
         throw new RuntimeException("wrong selection -> this should not happen at all");
