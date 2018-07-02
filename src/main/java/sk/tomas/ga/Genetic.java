@@ -9,7 +9,7 @@ public class Genetic {
 
     private final double CROSS_RATE = 0.7; //crossing probability 0.7 - 1.0
     private final double MUTATION_RATE = 0.05; //mutation of each gene probability
-    private final int POPULATION_SIZE = 50; //number of individuals in population
+    private final int POPULATION_SIZE = 20; //number of individuals in population
     private final int HIDDEN_LAYER_DEEP = 1;
     private final int OUTPUT_LAYER_DEEP = 2;
 
@@ -22,21 +22,21 @@ public class Genetic {
         Random mutationRandom = new Random();
 
 
-        Double bestScore = 0d;
+        double bestScore = 0;
         Population newPopulation;
-        while (bestScore < 50) {
+        while (bestScore < 20) {
+
             newPopulation = new Population();
 
             if (population == null) { //population zero
-                population = new Population(POPULATION_SIZE, 4, 2, 1);
+                population = new Population(POPULATION_SIZE, 2, 2, 1);
+                population.execute();//calculate fitness of each individual
             }
-
-            population.execute();//calculate fitness of each individual
 
             //TODO subtract from all fitnesses value of individual with minimal fitness value -> this individual will never be picked up
 
             //crossing
-            for (int i = 0; i < POPULATION_SIZE / 2; i++) {
+            for (int i = 0; i < population.getPopulation().size() / 2; i++) {
                 Network parent1 = selection(population, selectionRandom); //selection
                 Network parent2 = selection(population, selectionRandom); //selection
                 Network[] children = cross(parent1, parent2, crossingRandom, parentRandom);
@@ -45,14 +45,16 @@ public class Genetic {
             }
 
             //mutation
-            for (Individual individual : population.getPopulation()) {
-                mutate(individual.getNetwork(), mutationRandom);
+            for (Individual individual : newPopulation.getPopulation()) {
+                individual.setNetwork(mutate(individual.getNetwork(), mutationRandom));
             }
 
-            bestScore = population.getBest().getFitness();
+            newPopulation.execute();//calculate fitness of each individual
+
+            bestScore++;
+            System.out.println("before: " + population.getBest().getFitness() + " after: " + newPopulation.getBest().getFitness());
             newPopulation.getPopulation().set(0, population.getBest()); //elitism
             population = newPopulation;
-            System.out.println(bestScore);
         }
     }
 

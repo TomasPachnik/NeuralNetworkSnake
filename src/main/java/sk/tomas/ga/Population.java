@@ -57,7 +57,7 @@ class Population {
     double getSumFitness() {
         double sum = 0;
         for (Individual individual : population) {
-            sum+=individual.getFitness();
+            sum += individual.getFitness();
         }
         return sum;
     }

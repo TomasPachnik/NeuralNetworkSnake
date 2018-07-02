@@ -19,6 +19,10 @@ class Individual {
         return sumScore / runs;
     }
 
+    public void setNetwork(Network network) {
+        this.network = network;
+    }
+
     public Network getNetwork() {
         return network;
     }
@@ -36,13 +40,18 @@ class Individual {
         runs++;
     }
 
-    public void rate(double[] input, double[] output) {
-        double sum = 0;
-        for (double val : input) {
-            sum += val;
+    private void rate(double[] input, double[] output) {
+        if (input[0] == 0 && input[1] == 0 && output[0] < 0.5) {
+            sumScore += 10;
         }
-        if (sum == 1 && output[0] >= 0.5) {
-            sumScore += 100;
+        if (input[0] == 0 && input[1] == 0 && output[0] < 0.5) {
+            sumScore += 10;
+        }
+        if (input[0] == 1 && input[1] == 0 && output[0] > 0.5) {
+            sumScore += 10;
+        }
+        if (input[0] == 1 && input[1] == 1 && output[0] > 0.5) {
+            sumScore += 10;
         }
     }
 
