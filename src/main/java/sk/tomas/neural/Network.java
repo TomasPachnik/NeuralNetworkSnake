@@ -18,6 +18,14 @@ public interface Network {
 
     double getWeight(int fromLayer, int fromIndex, int ancestorIndex);
 
-    void setWeight(int  fromLayer, int fromIndex, int ancestorIndex, double value);
+    void setWeight(int fromLayer, int fromIndex, int ancestorIndex, double value);
+
+    double getLearningRate();
+
+    int getInputLayer();
+
+    int getHiddenLayer();
+
+    int getOutputLayer();
 
 }

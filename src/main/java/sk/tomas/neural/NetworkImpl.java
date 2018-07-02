@@ -10,12 +10,18 @@ public class NetworkImpl implements Network, Serializable {
     private double learningRate;
     private double errorRate;
     private int cycles;
+    private int inputLayer;
+    private int hiddenLayer;
+    private int outputLayer;
 
     private List<List<Neural>> network;
 
-    public NetworkImpl(int inputLayer, int hiddenLayer, int outpuLayer, double learningRate) {
-        this.networkSize = new int[]{inputLayer, hiddenLayer, outpuLayer};
+    public NetworkImpl(int inputLayer, int hiddenLayer, int outputLayer, double learningRate) {
+        this.networkSize = new int[]{inputLayer, hiddenLayer, outputLayer};
         this.learningRate = learningRate;
+        this.inputLayer = inputLayer;
+        this.hiddenLayer = hiddenLayer;
+        this.outputLayer = outputLayer;
         init();
         randomizeWeights();
         addBias();
@@ -194,5 +200,25 @@ public class NetworkImpl implements Network, Serializable {
 
     private List<List<Neural>> getNetwork() {
         return network;
+    }
+
+    @Override
+    public double getLearningRate() {
+        return learningRate;
+    }
+
+    @Override
+    public int getInputLayer() {
+        return inputLayer;
+    }
+
+    @Override
+    public int getHiddenLayer() {
+        return hiddenLayer;
+    }
+
+    @Override
+    public int getOutputLayer() {
+        return outputLayer;
     }
 }
