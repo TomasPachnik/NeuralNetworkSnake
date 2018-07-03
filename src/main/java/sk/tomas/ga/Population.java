@@ -34,10 +34,13 @@ class Population {
     }
 
     void execute() throws InputException {
+        int number = 0;
         for (Individual individual : population) {
             for (int i = 0; i < NETWORK_RUNS; i++) {
                 individual.run();
             }
+            number++;
+         //   System.out.println("individual " + number);
         }
 
     }

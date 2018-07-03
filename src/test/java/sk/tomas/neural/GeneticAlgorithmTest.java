@@ -13,9 +13,10 @@ public class GeneticAlgorithmTest {
     }
 
     @Test
-    public void GATest() throws InputException {
+    public void GATest() throws InputException, InterruptedException, FileException {
         Genetic genetic = new Genetic();
         genetic.run();
     }
+
 
 }

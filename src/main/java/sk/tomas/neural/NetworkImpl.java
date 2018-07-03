@@ -23,7 +23,7 @@ public class NetworkImpl implements Network, Serializable {
         this.outputLayer = outputLayer;
         init();
         randomizeWeights();
-        //addBias();
+        addBias();
     }
 
     public NetworkImpl(int inputLayer, int hiddenLayer, int outputLayer, double learningRate) {

@@ -1,7 +1,11 @@
 package sk.tomas.ga;
 
+import sk.tomas.neural.FileException;
 import sk.tomas.neural.InputException;
 import sk.tomas.neural.Network;
+import sk.tomas.snake.Movement;
+import sk.tomas.snake.Snake;
+import sk.tomas.snake.SnakeImpl;
 
 import java.util.Random;
 
@@ -15,21 +19,21 @@ public class Genetic {
 
     private Population population;
 
-    public void run() throws InputException {
+    public void run() throws InputException, InterruptedException, FileException {
         Random crossingRandom = new Random();
         Random parentRandom = new Random();
         Random selectionRandom = new Random();
         Random mutationRandom = new Random();
 
 
-        double bestScore = 0;
+        double index = 0;
         Population newPopulation;
-        while (bestScore < 200) {
+        while (index < 300) {
 
             newPopulation = new Population();
 
             if (population == null) { //population zero
-                population = new Population(POPULATION_SIZE, 2, 2, 1);
+                population = new Population(POPULATION_SIZE, 120, 12, 3);
                 population.execute();//calculate fitness of each individual
             }
 
@@ -39,14 +43,14 @@ public class Genetic {
             for (int i = 0; i < population.getPopulation().size() / 2; i++) {
                 Individual parent1 = selection(population, selectionRandom); //selection
                 Individual parent2 = selection(population, selectionRandom); //selection
-                System.out.print(parent1.getFitness() + " " + parent1.getFitness() + " ");
+                //System.out.print(parent1.getFitness() + " " + parent1.getFitness() + " ");
                 Network[] children = cross(parent1.getNetwork(), parent2.getNetwork(), crossingRandom, parentRandom);
                 //children[0] = mutate(children[0], mutationRandom);
                 //children[1] = mutate(children[1], mutationRandom);
                 newPopulation.getPopulation().add(new Individual(children[0]));
                 newPopulation.getPopulation().add(new Individual(children[1]));
             }
-            System.out.println();
+            // System.out.println();
 
             //mutation
             for (Individual individual : newPopulation.getPopulation()) {
@@ -55,19 +59,26 @@ public class Genetic {
 
             newPopulation.execute();//calculate fitness of each individual
 
-            bestScore++;
-            System.out.println("before: " + population.getBest().getFitness() + " after: " + newPopulation.getBest().getFitness());
+            index++;
+            //System.out.println("before: " + population.getBest().getFitness() + " after: " + newPopulation.getBest().getFitness());
             newPopulation.getPopulation().set(0, population.getBest()); //elitism
             population = newPopulation;
+            System.out.println("index: " + index + " fitness: " + population.getBest().getFitness());
         }
         Network best = population.getBest().getNetwork();
 
-        double[] input1 = new double[]{0, 1};
-        double[] input2 = new double[]{1, 0};
+        best.saveState("best");
 
-        System.out.println();
-        System.out.println(best.run(input1)[0]);
-        System.out.println(best.run(input2)[0]);
+
+        Snake snake = new SnakeImpl(10, 10);
+        snake.print();
+        boolean alive = true;
+        while (alive) {
+            double[] move = best.run(snake.actualInfo());
+            alive = snake.move(Movement.map(move));
+            snake.print();
+            Thread.sleep(500);
+        }
 
     }
 
@@ -127,9 +138,7 @@ public class Genetic {
                 if (mutationRandom.nextDouble() < MUTATION_RATE) {
                     weight = network.getWeight(bottomLayerDeep, i, j);
                     weight += Util.normalDistributionForMutation();
-                    if (weight >= -1 && weight <= 1) {
-                        network.setWeight(bottomLayerDeep, i, j, weight);
-                    }
+                    network.setWeight(bottomLayerDeep, i, j, weight);
                 }
             }
         }
