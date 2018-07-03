@@ -5,15 +5,13 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        Snake app = new SnakeImpl(10, 10);
+        Snake app = new SnakeImpl(8, 10);
         Scanner keyboard = new Scanner(System.in);
         boolean exit = false;
         while (!exit) {
-            double[] array = app.actualInfo();
-            for (int i = 0; i < 120; i++) {
-                if (array[i] == 1) {
-                    System.out.print(i + " ");
-                }
+            double[] array = app.actualInfoLite();
+            for (int i = 0; i < 6; i++) {
+                System.out.print(array[i] + " ");
             }
             System.out.println();
             app.print();

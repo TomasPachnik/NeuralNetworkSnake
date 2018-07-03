@@ -8,8 +8,10 @@ public interface Snake {
 
     int score();
 
-    int helpScore();
+    int fitness();
 
     double [] actualInfo();
+
+    double[] actualInfoLite();
 
 }

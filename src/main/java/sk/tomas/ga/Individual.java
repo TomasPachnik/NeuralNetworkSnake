@@ -28,18 +28,18 @@ class Individual {
     }
 
     void run() throws InputException {
-        Snake snake = new SnakeImpl(10, 10);
+        Snake snake = new SnakeImpl(30, 20);
         boolean alive = true;
 
         while (alive) {
-            double[] move = network.run(snake.actualInfo());
+            double[] move = network.run(snake.actualInfoLite());
             alive = snake.move(Movement.map(move));
-            if (snake.helpScore() < -100) {
+            if (snake.fitness() < -100) {
                 alive = false;
             }
         }
-        if (snake.helpScore() > score) {
-            score = snake.helpScore();
+        if (snake.fitness() > score) {
+            score = snake.fitness();
         }
     }
 

@@ -83,6 +83,7 @@ public class SnakeImpl implements Snake {
             }
             System.out.println();
         }
+        System.out.println();
     }
 
     @Override
@@ -91,7 +92,7 @@ public class SnakeImpl implements Snake {
     }
 
     @Override
-    public int helpScore() {
+    public int fitness() {
         return helpScore;
     }
 
@@ -112,7 +113,7 @@ public class SnakeImpl implements Snake {
                 index++;
             }
         }
-        index = 119;
+        index = 99;
         for (int i = 4; i >= 0; i--) {
             if (s1.length() > i) {
                 double value = Double.parseDouble(s1.charAt(i) + "");
@@ -140,6 +141,70 @@ public class SnakeImpl implements Snake {
             }
         }
         return result;
+    }
+
+    @Override
+    public double[] actualInfoLite() {
+        double[] result = new double[6];
+
+        Node left = getNodeByRotation(Rotation.left(lastRotation));
+        if (isWall(left.getX(), left.getY()) || isBody(left.getX(), left.getY())) {
+            result[0] = 1;
+        }
+        if (isAppleInDirection(left)) {
+            result[3] = 1;
+        }
+
+        Node forward = getNodeByRotation(lastRotation);
+        if (isWall(forward.getX(), forward.getY()) || isBody(forward.getX(), forward.getY())) {
+            result[1] = 1;
+        }
+        if (isAppleInDirection(forward)) {
+            result[4] = 1;
+        }
+
+        Node right = getNodeByRotation(Rotation.right(lastRotation));
+        if (isWall(right.getX(), right.getY()) || isBody(right.getX(), right.getY())) {
+            result[2] = 1;
+        }
+        if (isAppleInDirection(right)) {
+            result[5] = 1;
+        }
+
+        return result;
+    }
+
+    private boolean isAppleInDirection(Node direction) {
+        if (body.get(0).getY() > direction.getY() && apple.getY() <= direction.getY()) {
+            return true;
+        } else {
+            if (body.get(0).getY() < direction.getY() && apple.getY() >= direction.getY()) {
+                return true;
+            } else {
+                if (body.get(0).getX() > direction.getX() && apple.getX() <= direction.getX()) {
+                    return true;
+                } else {
+                    if (body.get(0).getX() < direction.getX() && apple.getX() >= direction.getX()) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private Node getNodeByRotation(Rotation rotation) {
+        switch (rotation) {
+            case UP:
+                return new Node(body.get(0).getX() - 1, body.get(0).getY());
+            case RIGHT:
+                return new Node(body.get(0).getX(), body.get(0).getY() + 1);
+            case DOWN:
+                return new Node(body.get(0).getX() + 1, body.get(0).getY());
+            case LEFT:
+                return new Node(body.get(0).getX(), body.get(0).getY() - 1);
+        }
+        return null;
     }
 
     private boolean move(Rotation rotation) {
@@ -216,6 +281,15 @@ public class SnakeImpl implements Snake {
             }
         }
         return false;
+    }
+
+    //TODO check if x is width side and y is height side
+    private boolean isWall(int x, int y) {
+        return x < 0 || y < 0 || y >= width || x >= height;
+    }
+
+    private boolean isApple(int x, int y) {
+        return x == apple.getX() && y == apple.getY();
     }
 
 }

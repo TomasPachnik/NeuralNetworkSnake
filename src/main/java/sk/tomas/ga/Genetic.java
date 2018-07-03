@@ -26,14 +26,15 @@ public class Genetic {
         Random mutationRandom = new Random();
 
 
-        double index = 0;
+        double fitness = 0;
+        int index = 0;
         Population newPopulation;
-        while (index < 300) {
+        while ( index < 50) {
 
             newPopulation = new Population();
 
             if (population == null) { //population zero
-                population = new Population(POPULATION_SIZE, 120, 12, 3);
+                population = new Population(POPULATION_SIZE, 6, 4, 3);
                 population.execute();//calculate fitness of each individual
             }
 
@@ -43,14 +44,10 @@ public class Genetic {
             for (int i = 0; i < population.getPopulation().size() / 2; i++) {
                 Individual parent1 = selection(population, selectionRandom); //selection
                 Individual parent2 = selection(population, selectionRandom); //selection
-                //System.out.print(parent1.getFitness() + " " + parent1.getFitness() + " ");
                 Network[] children = cross(parent1.getNetwork(), parent2.getNetwork(), crossingRandom, parentRandom);
-                //children[0] = mutate(children[0], mutationRandom);
-                //children[1] = mutate(children[1], mutationRandom);
                 newPopulation.getPopulation().add(new Individual(children[0]));
                 newPopulation.getPopulation().add(new Individual(children[1]));
             }
-            // System.out.println();
 
             //mutation
             for (Individual individual : newPopulation.getPopulation()) {
@@ -59,26 +56,27 @@ public class Genetic {
 
             newPopulation.execute();//calculate fitness of each individual
 
-            index++;
-            //System.out.println("before: " + population.getBest().getFitness() + " after: " + newPopulation.getBest().getFitness());
             newPopulation.getPopulation().set(0, population.getBest()); //elitism
             population = newPopulation;
-            System.out.println("index: " + index + " fitness: " + population.getBest().getFitness());
+            index++;
+            fitness = population.getBest().getFitness();
+            System.out.println("index: " + index + " fitness: " + fitness);
         }
         Network best = population.getBest().getNetwork();
 
         best.saveState("best");
 
 
-        Snake snake = new SnakeImpl(10, 10);
+        Snake snake = new SnakeImpl(30, 20);
         snake.print();
         boolean alive = true;
         while (alive) {
-            double[] move = best.run(snake.actualInfo());
+            double[] move = best.run(snake.actualInfoLite());
             alive = snake.move(Movement.map(move));
             snake.print();
-            Thread.sleep(500);
+            Thread.sleep(50);
         }
+        System.out.println(snake.score());
 
     }
 
