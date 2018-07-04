@@ -101,7 +101,7 @@ public class NetworkImpl implements Network, Serializable {
     }
 
     @Override
-    public double[] teach(double[] input, double[] expected) throws InputException {
+    public double[] teach(double[] input, double[] expected)  {
         double[] run = run(input);
         backPropagation(expected);
         cycles++;
@@ -110,10 +110,7 @@ public class NetworkImpl implements Network, Serializable {
     }
 
     @Override
-    public double[] run(double[] input) throws InputException {
-        if (networkSize[0] != input.length) {
-            throw new InputException("wrong input length");
-        }
+    public double[] run(double[] input){
         for (int i = 0; i < network.get(0).size(); i++) {
             network.get(0).get(i).setLastValue(input[i]);
         }

@@ -2,9 +2,9 @@ package sk.tomas.neural;
 
 public interface Network {
 
-    double[] teach(double[] input, double[] expected) throws InputException;
+    double[] teach(double[] input, double[] expected);
 
-    double[] run(double[] input) throws InputException;
+    double[] run(double[] input);
 
     void saveState(String filename) throws FileException;
 

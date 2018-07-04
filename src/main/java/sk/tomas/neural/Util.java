@@ -106,6 +106,11 @@ public class Util {
         }
     }
 
+    static boolean deleteFile(String filename) {
+        File file = new File(filename + ".dat");
+        return file.delete();
+    }
+
     static Object clone(Object orig) {
         Object obj = null;
         try {
@@ -121,10 +126,5 @@ public class Util {
             e.printStackTrace();
         }
         return obj;
-    }
-
-    static boolean deleteFile(String filename) {
-        File file = new File(filename + ".dat");
-        return file.delete();
     }
 }

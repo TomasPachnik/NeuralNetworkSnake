@@ -8,7 +8,7 @@ import java.util.Random;
 public class NeuralTests {
 
     @Test
-    public void neuralTest() throws InputException {
+    public void neuralTest() {
         int inputNeurons = 2;
         Network network = new NetworkImpl(inputNeurons, 2, 1, 0.5);
         Random random = new Random();
@@ -47,7 +47,7 @@ public class NeuralTests {
     }
 
     @Test
-    public void testtt() throws InputException {
+    public void testtt() {
         Network network = new NetworkImpl(2, 2, 1, 0.4);
         network.setWeight(1, 0, 0, 3.633942326468051);
         network.setWeight(1, 0, 1, 2.947643361088329);

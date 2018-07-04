@@ -77,7 +77,7 @@ public class SnakeImpl implements Snake {
                     if ((i == apple.getX()) && (j == apple.getY())) {
                         System.out.print("o");
                     } else {
-                        System.out.print("-");
+                        System.out.print(".");
                     }
                 }
             }

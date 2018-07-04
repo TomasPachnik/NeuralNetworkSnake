@@ -1,6 +1,5 @@
 package sk.tomas.ga;
 
-import sk.tomas.neural.InputException;
 import sk.tomas.neural.NetworkImpl;
 
 import java.util.ArrayList;
@@ -8,20 +7,21 @@ import java.util.List;
 
 class Population {
 
-    private int NETWORK_RUNS = 100;
-
     private List<Individual> population;
+    private final int networkRuns;
 
-    public Population() {
+    Population(int networkRuns) {
         this.population = new ArrayList<>();
+        this.networkRuns = networkRuns;
     }
 
-    public Population(int populationSize, int inputLayer, int hiddenLayer, int outputLayer) {
+    Population(int populationSize, int networkRuns, int inputLayer, int hiddenLayer, int outputLayer) {
         this.population = new ArrayList<>();
+        this.networkRuns = networkRuns;
         initPopulation(populationSize, inputLayer, hiddenLayer, outputLayer);
     }
 
-    public List<Individual> getPopulation() {
+    List<Individual> getPopulation() {
         return population;
     }
 
@@ -33,10 +33,10 @@ class Population {
         }
     }
 
-    void execute() throws InputException {
+    void execute(Strategy strategy) {
         for (Individual individual : population) {
-            for (int i = 0; i < NETWORK_RUNS; i++) {
-                individual.run();
+            for (int i = 0; i < networkRuns; i++) {
+                individual.run(strategy);
             }
         }
 
