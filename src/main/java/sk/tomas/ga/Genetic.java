@@ -6,4 +6,16 @@ public interface Genetic {
 
     Network run();
 
+    void setCrossRate(double crossRate);
+
+    void setMutationRate(double mutationRate);
+
+    void setPopulationSize(int populationSize);
+
+    void setGenerations(int generations);
+
+    void setNetworkRuns(int networkRuns);
+
+    void saveAfterEachGeneration(boolean save, String name);
+
 }

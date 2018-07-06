@@ -1,24 +1,33 @@
 package sk.tomas.ga;
 
+import sk.tomas.neural.FileException;
 import sk.tomas.neural.Network;
 
 import java.util.Random;
 
 public class GeneticImpl implements Genetic {
 
-    private final double crossRate; //crossing probability 0.7 - 1.0
-    private final double mutationRate; //mutation of each gene probability 0.05
-    private final int populationSize; //number of individuals in population 50
+    private double crossRate = 0.7; //crossing probability 0.7 - 1.0
+    private double mutationRate = 0.05; //mutation of each gene probability 0.05
+    private int populationSize = 50; //number of individuals in population 50
+    private int generations = 30; //number of generations
+    private int networkRuns = 1; //number of iteration for every network
+    private String saveAfterEachGeneration = null;
     private final int inputLayerSize; //number of neurons of input layer
     private final int hiddenLayerSize; //number of neurons of middle hidden layer
     private final int outputLayerSize; //number of neurons of output layer
-    private final int generations; //number of generations
-    private final int networkRuns; //number of iteration for every network
     private Strategy strategy; // interface for strategy patterns, which implement network run
     private final int HIDDEN_LAYER_DEEP = 1;
     private final int OUTPUT_LAYER_DEEP = 2;
 
     private Population population;
+
+    public GeneticImpl(int inputLayerSize, int hiddenLayerSize, int outputLayerSize, Strategy strategy) {
+        this.inputLayerSize = inputLayerSize;
+        this.hiddenLayerSize = hiddenLayerSize;
+        this.outputLayerSize = outputLayerSize;
+        this.strategy = strategy;
+    }
 
     public GeneticImpl(double crossRate, double mutationRate, int populationSize, int generations, int networkRuns, int inputLayerSize, int hiddenLayerSize, int outputLayerSize, Strategy strategy) {
         this.crossRate = crossRate;
@@ -70,6 +79,10 @@ public class GeneticImpl implements Genetic {
             population = newPopulation;
             index++;
             System.out.println("index: " + index + " fitness: " + population.getBest().getFitness());
+
+            if (saveAfterEachGeneration != null) {
+                save(population.getBest().getNetwork(), saveAfterEachGeneration);
+            }
         }
 
         return population.getBest().getNetwork();
@@ -139,6 +152,48 @@ public class GeneticImpl implements Genetic {
             }
         }
         return network;
+    }
+
+    private void save(Network network, String name) {
+        try {
+            network.saveState(name);
+        } catch (FileException e) {
+            System.out.println("Could not save network state.");
+        }
+    }
+
+    @Override
+    public void setCrossRate(double crossRate) {
+        this.crossRate = crossRate;
+    }
+
+    @Override
+    public void setMutationRate(double mutationRate) {
+        this.mutationRate = mutationRate;
+    }
+
+    @Override
+    public void setPopulationSize(int populationSize) {
+        this.populationSize = populationSize;
+    }
+
+    @Override
+    public void setGenerations(int generations) {
+        this.generations = generations;
+    }
+
+    @Override
+    public void setNetworkRuns(int networkRuns) {
+        this.networkRuns = networkRuns;
+    }
+
+    @Override
+    public void saveAfterEachGeneration(boolean save, String name) {
+        if (save && name != null) {
+            this.saveAfterEachGeneration = name;
+        } else {
+            this.saveAfterEachGeneration = null;
+        }
     }
 
 }
