@@ -2,10 +2,11 @@ package sk.tomas.ga;
 
 import sk.tomas.neural.NetworkImpl;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-class Population {
+class Population  implements Serializable {
 
     private List<Individual> population;
     private final int networkRuns;

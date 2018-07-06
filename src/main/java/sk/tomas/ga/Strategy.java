@@ -2,7 +2,9 @@ package sk.tomas.ga;
 
 import sk.tomas.neural.Network;
 
-public interface Strategy {
+import java.io.Serializable;
+
+public interface Strategy extends Serializable {
 
     /**
      *

@@ -3,9 +3,10 @@ package sk.tomas.ga;
 import sk.tomas.neural.FileException;
 import sk.tomas.neural.Network;
 
+import java.io.Serializable;
 import java.util.Random;
 
-public class GeneticImpl implements Genetic {
+public class GeneticImpl implements Genetic, Serializable {
 
     private double crossRate = 0.7; //crossing probability 0.7 - 1.0
     private double mutationRate = 0.05; //mutation of each gene probability 0.05
@@ -13,14 +14,16 @@ public class GeneticImpl implements Genetic {
     private int generations = 30; //number of generations
     private int networkRuns = 1; //number of iteration for every network
     private String saveAfterEachGeneration = null;
-    private final int inputLayerSize; //number of neurons of input layer
-    private final int hiddenLayerSize; //number of neurons of middle hidden layer
-    private final int outputLayerSize; //number of neurons of output layer
+    private boolean save; //save actual state
+    private int inputLayerSize; //number of neurons of input layer
+    private int hiddenLayerSize; //number of neurons of middle hidden layer
+    private int outputLayerSize; //number of neurons of output layer
     private Strategy strategy; // interface for strategy patterns, which implement network run
     private final int HIDDEN_LAYER_DEEP = 1;
     private final int OUTPUT_LAYER_DEEP = 2;
 
     private Population population;
+    private final String geneticSave = "geneticSave";
 
     public GeneticImpl(int inputLayerSize, int hiddenLayerSize, int outputLayerSize, Strategy strategy) {
         this.inputLayerSize = inputLayerSize;
@@ -42,7 +45,7 @@ public class GeneticImpl implements Genetic {
     }
 
     @Override
-    public Network run() {
+    public Network run() throws FileException {
         Random crossingRandom = new Random();
         Random parentRandom = new Random();
         Random selectionRandom = new Random();
@@ -84,6 +87,10 @@ public class GeneticImpl implements Genetic {
             if (saveAfterEachGeneration != null) {
                 save(population.getBest().getNetwork(), saveAfterEachGeneration);
             }
+            if (save) {
+                Util.writeFile(geneticSave, this);
+            }
+
         }
 
         return population.getBest().getNetwork();
@@ -195,6 +202,78 @@ public class GeneticImpl implements Genetic {
         } else {
             this.saveAfterEachGeneration = null;
         }
+    }
+
+    @Override
+    public void autoSave(boolean save) {
+        this.save = save;
+    }
+
+    private Population getPopulation() {
+        return population;
+    }
+
+    private double getCrossRate() {
+        return crossRate;
+    }
+
+    private double getMutationRate() {
+        return mutationRate;
+    }
+
+    private int getPopulationSize() {
+        return populationSize;
+    }
+
+    private int getGenerations() {
+        return generations;
+    }
+
+    private int getNetworkRuns() {
+        return networkRuns;
+    }
+
+    private String getSaveAfterEachGeneration() {
+        return saveAfterEachGeneration;
+    }
+
+    private boolean isSave() {
+        return save;
+    }
+
+    private int getInputLayerSize() {
+        return inputLayerSize;
+    }
+
+    private int getHiddenLayerSize() {
+        return hiddenLayerSize;
+    }
+
+    private int getOutputLayerSize() {
+        return outputLayerSize;
+    }
+
+    private Strategy getStrategy() {
+        return strategy;
+    }
+
+    @Override
+    public void loadState() throws FileException {
+        Genetic genetic = Util.readFile(geneticSave);
+        population = ((GeneticImpl) genetic).getPopulation();
+        crossRate = ((GeneticImpl) genetic).getCrossRate();
+        mutationRate = ((GeneticImpl) genetic).getMutationRate();
+        mutationRate = ((GeneticImpl) genetic).getMutationRate();
+        populationSize = ((GeneticImpl) genetic).getPopulationSize();
+        generations = ((GeneticImpl) genetic).getGenerations();
+        networkRuns = ((GeneticImpl) genetic).getNetworkRuns();
+        saveAfterEachGeneration = ((GeneticImpl) genetic).getSaveAfterEachGeneration();
+        save = ((GeneticImpl) genetic).isSave();
+        inputLayerSize = ((GeneticImpl) genetic).getInputLayerSize();
+        hiddenLayerSize = ((GeneticImpl) genetic).getHiddenLayerSize();
+        outputLayerSize = ((GeneticImpl) genetic).getOutputLayerSize();
+        strategy = ((GeneticImpl) genetic).getStrategy();
+
     }
 
 }

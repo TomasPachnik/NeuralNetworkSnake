@@ -2,7 +2,9 @@ package sk.tomas.ga;
 
 import sk.tomas.neural.Network;
 
-class Individual {
+import java.io.Serializable;
+
+class Individual implements Serializable {
 
     private Network network;
     private double fitness = 0;
