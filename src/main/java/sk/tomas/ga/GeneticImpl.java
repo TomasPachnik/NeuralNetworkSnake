@@ -57,6 +57,7 @@ public class GeneticImpl implements Genetic {
             if (population == null) { //population zero
                 population = new Population(populationSize, networkRuns, inputLayerSize, hiddenLayerSize, outputLayerSize);
                 population.execute(strategy);//calculate fitness of each individual
+                System.out.println("population zero performed");
             }
 
             //crossing
