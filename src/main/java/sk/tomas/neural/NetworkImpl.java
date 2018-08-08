@@ -14,7 +14,7 @@ public class NetworkImpl implements Network, Serializable {
     private int hiddenLayer;
     private int outputLayer;
 
-    private List<List<Neural>> network;
+    private List<List<NeuralOld>> network;
 
     public NetworkImpl(int inputLayer, int hiddenLayer, int outputLayer) {
         this.networkSize = new int[]{inputLayer, hiddenLayer, outputLayer};
@@ -40,26 +40,26 @@ public class NetworkImpl implements Network, Serializable {
     private void init() {
         network = new ArrayList<>();
         for (int i = 0; i < networkSize.length; i++) {
-            List<Neural> layer = new ArrayList<>();
+            List<NeuralOld> layer = new ArrayList<>();
             for (int j = 0; j < networkSize[i]; j++) {
                 //input layer does not have ancestors
-                List<NeuralInput> neuralInputs = new ArrayList<>();
+                List<NeuralInputOld> neuralInputs = new ArrayList<>();
                 if (i < 1) {
-                    neuralInputs.add(new NeuralInput(null));
+                    neuralInputs.add(new NeuralInputOld(null));
                 } else {
                     for (int k = 0; k < networkSize[i - 1]; k++) {
-                        neuralInputs.add(new NeuralInput(network.get(i - 1).get(k)));
+                        neuralInputs.add(new NeuralInputOld(network.get(i - 1).get(k)));
                     }
                 }
-                layer.add(new Neural(neuralInputs));
+                layer.add(new NeuralOld(neuralInputs));
             }
             network.add(layer);
         }
     }
 
     private void randomizeWeights() {
-        for (List<Neural> innerList : network) {
-            for (Neural neural : innerList) {
+        for (List<NeuralOld> innerList : network) {
+            for (NeuralOld neural : innerList) {
                 neural.randomizeWeights();
             }
         }
@@ -72,10 +72,10 @@ public class NetworkImpl implements Network, Serializable {
     }
 
     private void addBias(int layerNumber) {
-        Neural bias = new Neural(new ArrayList<NeuralInput>());
+        NeuralOld bias = new NeuralOld(new ArrayList<NeuralInputOld>());
         bias.setBias();
         bias.setLastValue(1);
-        for (Neural neural : network.get(layerNumber)) {
+        for (NeuralOld neural : network.get(layerNumber)) {
             neural.addBias(bias);
         }
     }
@@ -135,8 +135,8 @@ public class NetworkImpl implements Network, Serializable {
 
     private double[] run() {
         for (int i = 1; i < network.size(); i++) {
-            for (Neural neural : network.get(i)) {
-                for (NeuralInput neuralInput : neural.getInputs()) {
+            for (NeuralOld neural : network.get(i)) {
+                for (NeuralInputOld neuralInput : neural.getInputs()) {
                     neuralInput.setX(neuralInput.getAncestor().getLastValue());
                 }
                 neural.forwardPropagation();
@@ -153,8 +153,8 @@ public class NetworkImpl implements Network, Serializable {
         //last layer
         List<Double> lastLayer = new ArrayList<>();
         for (int i = 0; i < expected.length; i++) {
-            Neural neural = network.get(network.size() - 1).get(i);
-            for (NeuralInput input : neural.getInputs()) {
+            NeuralOld neural = network.get(network.size() - 1).get(i);
+            for (NeuralInputOld input : neural.getInputs()) {
                 if (!input.getAncestor().isBias()) {
                     double temp = Util.errorAffect(expected[i], neural.getLastValue(), input.getAncestor().getLastValue());
                     lastLayer.add(Util.calculateNewWeight(input.getW(), learningRate, temp));
@@ -165,8 +165,8 @@ public class NetworkImpl implements Network, Serializable {
         List<Double> hiddenLayer = new ArrayList<>();
         for (int i = 0; i < expected.length; i++) {
             double mistake = calculateOutputMistake(i, expected);
-            Neural neural = network.get(1).get(i);
-            for (NeuralInput input : neural.getInputs()) {
+            NeuralOld neural = network.get(1).get(i);
+            for (NeuralInputOld input : neural.getInputs()) {
                 if (!input.getAncestor().isBias()) {
                     double temp = Util.errorAffectWithMistake(mistake, neural.getLastValue(), input.getAncestor().getLastValue());
                     hiddenLayer.add(Util.calculateNewWeight(input.getW(), learningRate, temp));
@@ -176,8 +176,8 @@ public class NetworkImpl implements Network, Serializable {
         //setting calculated weights
         int index = 0;
         for (int i = 0; i < expected.length; i++) {
-            Neural neural = network.get(network.size() - 1).get(i);
-            for (NeuralInput input : neural.getInputs()) {
+            NeuralOld neural = network.get(network.size() - 1).get(i);
+            for (NeuralInputOld input : neural.getInputs()) {
                 if (!input.getAncestor().isBias()) {
                     input.setW(lastLayer.get(index));
                     index++;
@@ -186,8 +186,8 @@ public class NetworkImpl implements Network, Serializable {
         }
         index = 0;
         for (int i = 0; i < expected.length; i++) {
-            Neural neural = network.get(1).get(i);
-            for (NeuralInput input : neural.getInputs()) {
+            NeuralOld neural = network.get(1).get(i);
+            for (NeuralInputOld input : neural.getInputs()) {
                 if (!input.getAncestor().isBias()) {
                     input.setW(hiddenLayer.get(index));
                     index++;
@@ -205,7 +205,7 @@ public class NetworkImpl implements Network, Serializable {
         return count;
     }
 
-    private List<List<Neural>> getNetwork() {
+    private List<List<NeuralOld>> getNetwork() {
         return network;
     }
 

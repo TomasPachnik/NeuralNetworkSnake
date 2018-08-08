@@ -1,13 +1,15 @@
 apply plugin: 'java'
 
-targetCompatibility = '1.7'
-sourceCompatibility = '1.7'
+targetCompatibility = '1.8'
+sourceCompatibility = '1.8'
 
 repositories {
     jcenter()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
+    compile 'com.github.TomasPachnik:Servant:0.31'
     compile group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
     testCompile 'junit:junit:4.12'
 }

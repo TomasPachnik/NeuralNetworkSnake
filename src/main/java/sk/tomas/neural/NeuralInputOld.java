@@ -2,13 +2,13 @@ package sk.tomas.neural;
 
 import java.io.Serializable;
 
-class NeuralInput implements Serializable {
+class NeuralInputOld implements Serializable {
 
     private double x;
     private double w;
-    private Neural ancestor;
+    private NeuralOld ancestor;
 
-    NeuralInput(Neural ancestor) {
+    NeuralInputOld(NeuralOld ancestor) {
         this.ancestor = ancestor;
     }
 
@@ -28,11 +28,11 @@ class NeuralInput implements Serializable {
         this.w = w;
     }
 
-    Neural getAncestor() {
+    NeuralOld getAncestor() {
         return ancestor;
     }
 
-    void setAncestor(Neural ancestor) {
+    void setAncestor(NeuralOld ancestor) {
         this.ancestor = ancestor;
     }
 }

@@ -3,32 +3,32 @@ package sk.tomas.neural;
 import java.io.Serializable;
 import java.util.List;
 
-class Neural implements Serializable {
+class NeuralOld implements Serializable {
 
-    private List<NeuralInput> inputs;
+    private List<NeuralInputOld> inputs;
     private double lastValue;
     private boolean bias;
 
-    Neural(List<NeuralInput> inputs) {
+    NeuralOld(List<NeuralInputOld> inputs) {
         this.inputs = inputs;
     }
 
     void randomizeWeights() {
-        for (NeuralInput neuralInput : inputs) {
+        for (NeuralInputOld neuralInput : inputs) {
             neuralInput.setW(Util.randomInit());
         }
     }
 
     void forwardPropagation() {
         lastValue = 0;
-        for (NeuralInput input : inputs) {
+        for (NeuralInputOld input : inputs) {
             lastValue += input.getX() * input.getW();
         }
         lastValue = Util.sigmoid(lastValue);
     }
 
-    void addBias(Neural bias) {
-        NeuralInput neuralInput = new NeuralInput(bias);
+    void addBias(NeuralOld bias) {
+        NeuralInputOld neuralInput = new NeuralInputOld(bias);
         neuralInput.setW(Util.randomInit());
         inputs.add(neuralInput);
     }
@@ -41,7 +41,7 @@ class Neural implements Serializable {
         this.lastValue = lastValue;
     }
 
-    List<NeuralInput> getInputs() {
+    List<NeuralInputOld> getInputs() {
         return inputs;
     }
 
