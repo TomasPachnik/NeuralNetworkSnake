@@ -4,6 +4,7 @@ import sk.tomas.neural.FileException;
 
 import java.io.Serializable;
 import java.util.Random;
+import sk.tomas.neural.config.NeuralConfiguration;
 import sk.tomas.neural.model.NeuralNetworkModel;
 
 public class GeneticImpl implements Genetic, Serializable {
@@ -15,7 +16,7 @@ public class GeneticImpl implements Genetic, Serializable {
     private int networkRuns = 1; //number of iteration for every network
     private String saveAfterEachGeneration = null;
     private boolean save; //save actual state
-    private NeuralNetworkModel model; //instance of neural network
+    private NeuralConfiguration configuration; //instance of neural network
     private Strategy strategy; // interface for strategy patterns, which implement network run
     //randoms
     private Random crossingRandom;
@@ -27,19 +28,19 @@ public class GeneticImpl implements Genetic, Serializable {
     private Population population;
     private final String geneticSave = "geneticSave";
 
-    public GeneticImpl(NeuralNetworkModel model, Strategy strategy) {
-        this.model = model;
+    public GeneticImpl(NeuralConfiguration configuration, Strategy strategy) {
+        this.configuration = configuration;
         this.strategy = strategy;
     }
 
     public GeneticImpl(double crossRate, double mutationRate, int populationSize, int generations, int networkRuns,
-            NeuralNetworkModel model, Strategy strategy) {
+            NeuralConfiguration configuration, Strategy strategy) {
         this.crossRate = crossRate;
         this.mutationRate = mutationRate;
         this.populationSize = populationSize;
         this.generations = generations;
         this.networkRuns = networkRuns;
-        this.model = model;
+        this.configuration = configuration;
         this.strategy = strategy;
     }
 
@@ -58,7 +59,7 @@ public class GeneticImpl implements Genetic, Serializable {
             newPopulation = new Population(networkRuns);
 
             if (population == null) { //population zero
-                population = new Population(populationSize, networkRuns, model);
+                population = new Population(populationSize, networkRuns, configuration);
                 population.execute(strategy);//calculate fitness of each individual
                 System.out.println("population zero performed");
             }
@@ -247,8 +248,8 @@ public class GeneticImpl implements Genetic, Serializable {
         return strategy;
     }
 
-    public NeuralNetworkModel getModel() {
-        return model;
+    private NeuralConfiguration getConfiguration() {
+        return configuration;
     }
 
     @Override
@@ -263,7 +264,7 @@ public class GeneticImpl implements Genetic, Serializable {
         networkRuns = ((GeneticImpl) genetic).getNetworkRuns();
         saveAfterEachGeneration = ((GeneticImpl) genetic).getSaveAfterEachGeneration();
         save = ((GeneticImpl) genetic).isSave();
-        model = ((GeneticImpl) genetic).getModel();
+        configuration = ((GeneticImpl) genetic).getConfiguration();
         strategy = ((GeneticImpl) genetic).getStrategy();
     }
 

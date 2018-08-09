@@ -81,7 +81,7 @@ public class Util {
         return result;
     }
 
-    static void writeFile(String filename, Network network) throws FileException {
+    public static void writeFile(String filename, Network network) throws FileException {
         try {
             FileOutputStream f = new FileOutputStream(new File(filename + ".dat"));
             ObjectOutputStream o = new ObjectOutputStream(f);
@@ -93,7 +93,7 @@ public class Util {
         }
     }
 
-    static Network readFile(String filename) throws FileException {
+    public static Network readFile(String filename) throws FileException {
         try {
             FileInputStream fi = new FileInputStream(new File(filename + ".dat"));
             ObjectInputStream oi = new ObjectInputStream(fi);
@@ -106,12 +106,12 @@ public class Util {
         }
     }
 
-    static boolean deleteFile(String filename) {
+    public static boolean deleteFile(String filename) {
         File file = new File(filename + ".dat");
         return file.delete();
     }
 
-    static Object clone(Object orig) {
+    public static Object clone(Object orig) {
         Object obj = null;
         try {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();

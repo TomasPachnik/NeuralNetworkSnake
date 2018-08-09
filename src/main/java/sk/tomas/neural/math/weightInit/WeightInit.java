@@ -1,6 +1,8 @@
 package sk.tomas.neural.math.weightInit;
 
-public interface WeightInit {
+import java.io.Serializable;
+
+public interface WeightInit extends Serializable {
 
     double initWeight();
 

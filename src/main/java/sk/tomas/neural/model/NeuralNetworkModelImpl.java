@@ -2,6 +2,7 @@ package sk.tomas.neural.model;
 
 import java.util.List;
 import sk.tomas.neural.FileException;
+import sk.tomas.neural.Util;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class NeuralNetworkModelImpl implements NeuralNetworkModel {
@@ -38,7 +39,7 @@ public class NeuralNetworkModelImpl implements NeuralNetworkModel {
 
     @Override
     public NeuralNetworkModel getClone() {
-        throw new NotImplementedException();
+        return (NeuralNetworkModel) Util.clone(this);
     }
 
     @Override
