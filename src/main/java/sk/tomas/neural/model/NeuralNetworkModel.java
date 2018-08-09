@@ -1,9 +1,19 @@
 package sk.tomas.neural.model;
 
-import java.util.Map;
+import java.io.Serializable;
+import sk.tomas.neural.FileException;
+import sk.tomas.neural.Network;
 
-public class NeuralNetworkModel {
+public interface NeuralNetworkModel extends Serializable {
 
-    private Map<Integer, Neural> network;
+    double[] run(double[] input);
+
+    void saveState(String filename) throws FileException;
+
+    void loadState(String filename) throws FileException;
+
+    boolean deleteState(String filename);
+
+    Network getClone();
 
 }

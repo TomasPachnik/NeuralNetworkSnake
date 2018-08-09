@@ -9,7 +9,7 @@ import sk.tomas.neural.model.NeuralNetworkModel;
 public class NewNeuralTests {
 
     @Test
-    public void testNeuralConfig(){
+    public void testNeuralConfig() {
 
         NeuralNetworkModel model = new NeuralConfiguration()
                 .initSeed(1L)
@@ -19,6 +19,7 @@ public class NewNeuralTests {
                 .addLayer(2, 3, true, Activation.SIGMOID)
                 .backpropagation(false)
                 .build();
+        System.out.println();
     }
 
 

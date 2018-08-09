@@ -1,6 +1,8 @@
 package sk.tomas.neural.model;
 
-public class NeuralInput {
+import java.io.Serializable;
+
+public class NeuralInput implements Serializable {
 
     private double x;
     private double w;
