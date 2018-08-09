@@ -10,10 +10,11 @@ import sk.tomas.neural.math.activation.None;
 import sk.tomas.neural.math.activation.Relu;
 import sk.tomas.neural.math.activation.Sigmoid;
 import sk.tomas.neural.math.weightInit.One;
-import sk.tomas.neural.math.weightInit.Random;
+import sk.tomas.neural.math.weightInit.RandomInit;
 import sk.tomas.neural.math.weightInit.Zero;
 import sk.tomas.neural.model.Neural;
 import sk.tomas.neural.model.NeuralInput;
+import sk.tomas.neural.model.NeuralNetworkModel;
 import sk.tomas.neural.model.NeuralNetworkModelImpl;
 
 public class NeuralConfiguration {
@@ -48,12 +49,10 @@ public class NeuralConfiguration {
         return this;
     }
 
-    public NeuralNetworkModelImpl build() {
-        NeuralNetworkModelImpl model = new NeuralNetworkModelImpl();
+    public NeuralNetworkModel build() {
         List<List<Neural>> network = initModel();
         network = initWeights(network);
-        model.setNetwork(network);
-        return model;
+        return new NeuralNetworkModelImpl(network);
 
     }
 
@@ -109,7 +108,7 @@ public class NeuralConfiguration {
                 return new One();
             case RANDOM:
             default:
-                return new Random();
+                return new RandomInit();
         }
     }
 

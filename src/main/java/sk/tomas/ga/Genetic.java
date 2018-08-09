@@ -1,11 +1,11 @@
 package sk.tomas.ga;
 
 import sk.tomas.neural.FileException;
-import sk.tomas.neural.Network;
+import sk.tomas.neural.model.NeuralNetworkModel;
 
 public interface Genetic {
 
-    Network run() throws FileException;
+    NeuralNetworkModel run() throws FileException;
 
     void setCrossRate(double crossRate);
 

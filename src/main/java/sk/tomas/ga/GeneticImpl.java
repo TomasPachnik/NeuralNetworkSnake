@@ -1,10 +1,10 @@
 package sk.tomas.ga;
 
 import sk.tomas.neural.FileException;
-import sk.tomas.neural.Network;
 
 import java.io.Serializable;
 import java.util.Random;
+import sk.tomas.neural.model.NeuralNetworkModel;
 
 public class GeneticImpl implements Genetic, Serializable {
 
@@ -15,41 +15,41 @@ public class GeneticImpl implements Genetic, Serializable {
     private int networkRuns = 1; //number of iteration for every network
     private String saveAfterEachGeneration = null;
     private boolean save; //save actual state
-    private int inputLayerSize; //number of neurons of input layer
-    private int hiddenLayerSize; //number of neurons of middle hidden layer
-    private int outputLayerSize; //number of neurons of output layer
+    private NeuralNetworkModel model; //instance of neural network
     private Strategy strategy; // interface for strategy patterns, which implement network run
-    private final int HIDDEN_LAYER_DEEP = 1;
-    private final int OUTPUT_LAYER_DEEP = 2;
+    //randoms
+    private Random crossingRandom;
+    private Random parentRandom;
+    private Random selectionRandom;
+    private Random mutationRandom;
+    private Random gaussianRandom;
 
     private Population population;
     private final String geneticSave = "geneticSave";
 
-    public GeneticImpl(int inputLayerSize, int hiddenLayerSize, int outputLayerSize, Strategy strategy) {
-        this.inputLayerSize = inputLayerSize;
-        this.hiddenLayerSize = hiddenLayerSize;
-        this.outputLayerSize = outputLayerSize;
+    public GeneticImpl(NeuralNetworkModel model, Strategy strategy) {
+        this.model = model;
         this.strategy = strategy;
     }
 
-    public GeneticImpl(double crossRate, double mutationRate, int populationSize, int generations, int networkRuns, int inputLayerSize, int hiddenLayerSize, int outputLayerSize, Strategy strategy) {
+    public GeneticImpl(double crossRate, double mutationRate, int populationSize, int generations, int networkRuns,
+            NeuralNetworkModel model, Strategy strategy) {
         this.crossRate = crossRate;
         this.mutationRate = mutationRate;
         this.populationSize = populationSize;
         this.generations = generations;
         this.networkRuns = networkRuns;
-        this.inputLayerSize = inputLayerSize;
-        this.hiddenLayerSize = hiddenLayerSize;
-        this.outputLayerSize = outputLayerSize;
+        this.model = model;
         this.strategy = strategy;
     }
 
     @Override
-    public Network run() throws FileException {
-        Random crossingRandom = new Random();
-        Random parentRandom = new Random();
-        Random selectionRandom = new Random();
-        Random mutationRandom = new Random();
+    public NeuralNetworkModel run() throws FileException {
+        crossingRandom = new Random();
+        parentRandom = new Random();
+        selectionRandom = new Random();
+        mutationRandom = new Random();
+        gaussianRandom = new Random();
 
         int index = 0;
         Population newPopulation;
@@ -58,23 +58,23 @@ public class GeneticImpl implements Genetic, Serializable {
             newPopulation = new Population(networkRuns);
 
             if (population == null) { //population zero
-                population = new Population(populationSize, networkRuns, inputLayerSize, hiddenLayerSize, outputLayerSize);
+                population = new Population(populationSize, networkRuns, model);
                 population.execute(strategy);//calculate fitness of each individual
                 System.out.println("population zero performed");
             }
 
             //crossing
             for (int i = 0; i < population.getPopulation().size() / 2; i++) {
-                Individual parent1 = selection(population, selectionRandom); //selection
-                Individual parent2 = selection(population, selectionRandom); //selection
-                Network[] children = cross(parent1.getNetwork(), parent2.getNetwork(), crossingRandom, parentRandom);
+                Individual parent1 = selection(population); //selection
+                Individual parent2 = selection(population); //selection
+                NeuralNetworkModel[] children = cross(parent1.getNetwork(), parent2.getNetwork());
                 newPopulation.getPopulation().add(new Individual(children[0]));
                 newPopulation.getPopulation().add(new Individual(children[1]));
             }
 
             //mutation
             for (Individual individual : newPopulation.getPopulation()) {
-                individual.setNetwork(mutate(individual.getNetwork(), mutationRandom));
+                individual.setNetwork(mutate(individual.getNetwork()));
             }
 
             newPopulation.execute(strategy);//calculate fitness of each individual
@@ -97,7 +97,7 @@ public class GeneticImpl implements Genetic, Serializable {
     }
 
     //roulette selection algorithm
-    private Individual selection(Population population, Random selectionRandom) {
+    private Individual selection(Population population) {
         double sum = 0;
         double dd = selectionRandom.nextDouble();
         double fitnessPoint = dd * population.getSumFitness();
@@ -112,28 +112,22 @@ public class GeneticImpl implements Genetic, Serializable {
         throw new RuntimeException("wrong selection -> this should not happen at all");
     }
 
-    private Network[] cross(Network parent1, Network parent2, Random crossingRandom, Random parentRandom) {
-        Network child1 = parent1.getClone();
-        Network child2 = parent1.getClone();
-        Network[] children = new Network[]{child1, child2};
+    private NeuralNetworkModel[] cross(NeuralNetworkModel parent1, NeuralNetworkModel parent2) {
+        NeuralNetworkModel child1 = parent1.getClone();
+        NeuralNetworkModel child2 = parent1.getClone();
+        NeuralNetworkModel[] children = new NeuralNetworkModel[]{child1, child2};
 
         if (crossingRandom.nextDouble() < crossRate) {
-            children = cross(parent1, parent2, children, parent1.getHiddenLayer(), parent1.getInputLayer(), HIDDEN_LAYER_DEEP, parentRandom);
-            children = cross(parent1, parent2, children, parent1.getOutputLayer(), parent1.getHiddenLayer(), OUTPUT_LAYER_DEEP, parentRandom);
+            for (int i = 1; i < parent1.getNetwork().size(); i++) {
+                children = cross(parent1, parent2, children, parent1.getNetwork().get(i).size(),
+                        parent1.getNetwork().get(i - 1).size(), i);
+            }
         }
-
         return children;
     }
 
-    private Network mutate(Network network, Random mutationRandom) {
-
-        network = mutate(network, network.getHiddenLayer(), network.getInputLayer(), HIDDEN_LAYER_DEEP, mutationRandom);
-        network = mutate(network, network.getOutputLayer(), network.getHiddenLayer(), OUTPUT_LAYER_DEEP, mutationRandom);
-
-        return network;
-    }
-
-    private Network[] cross(Network parent1, Network parent2, Network[] children, int bottomLayer, int upperLayer, int bottomLayerDeep, Random parentRandom) {
+    private NeuralNetworkModel[] cross(NeuralNetworkModel parent1, NeuralNetworkModel parent2,
+            NeuralNetworkModel[] children, int bottomLayer, int upperLayer, int bottomLayerDeep) {
         for (int i = 0; i < bottomLayer; i++) {
             for (int j = 0; j < upperLayer; j++) {
                 if (parentRandom.nextBoolean()) { //get from parent1
@@ -148,13 +142,21 @@ public class GeneticImpl implements Genetic, Serializable {
         return children;
     }
 
-    private Network mutate(Network network, int bottomLayer, int upperLayer, int bottomLayerDeep, Random mutationRandom) {
+    private NeuralNetworkModel mutate(NeuralNetworkModel network) {
+        for (int i = 1; i < network.getNetwork().size(); i++) {
+            network = mutate(network, network.getNetwork().get(i).size(), network.getNetwork().get(i - 1).size(), i);
+        }
+        return network;
+    }
+
+    private NeuralNetworkModel mutate(NeuralNetworkModel network, int bottomLayer, int upperLayer,
+            int bottomLayerDeep) {
         double weight;
         for (int i = 0; i < bottomLayer; i++) {
             for (int j = 0; j < upperLayer; j++) {
                 if (mutationRandom.nextDouble() < mutationRate) {
                     weight = network.getWeight(bottomLayerDeep, i, j);
-                    weight += Util.normalDistributionForMutation();
+                    weight += gaussianRandom.nextGaussian();
                     network.setWeight(bottomLayerDeep, i, j, weight);
                 }
             }
@@ -162,7 +164,7 @@ public class GeneticImpl implements Genetic, Serializable {
         return network;
     }
 
-    private void save(Network network, String name) {
+    private void save(NeuralNetworkModel network, String name) {
         try {
             network.saveState(name);
         } catch (FileException e) {
@@ -241,20 +243,12 @@ public class GeneticImpl implements Genetic, Serializable {
         return save;
     }
 
-    private int getInputLayerSize() {
-        return inputLayerSize;
-    }
-
-    private int getHiddenLayerSize() {
-        return hiddenLayerSize;
-    }
-
-    private int getOutputLayerSize() {
-        return outputLayerSize;
-    }
-
     private Strategy getStrategy() {
         return strategy;
+    }
+
+    public NeuralNetworkModel getModel() {
+        return model;
     }
 
     @Override
@@ -269,11 +263,8 @@ public class GeneticImpl implements Genetic, Serializable {
         networkRuns = ((GeneticImpl) genetic).getNetworkRuns();
         saveAfterEachGeneration = ((GeneticImpl) genetic).getSaveAfterEachGeneration();
         save = ((GeneticImpl) genetic).isSave();
-        inputLayerSize = ((GeneticImpl) genetic).getInputLayerSize();
-        hiddenLayerSize = ((GeneticImpl) genetic).getHiddenLayerSize();
-        outputLayerSize = ((GeneticImpl) genetic).getOutputLayerSize();
+        model = ((GeneticImpl) genetic).getModel();
         strategy = ((GeneticImpl) genetic).getStrategy();
-
     }
 
 }

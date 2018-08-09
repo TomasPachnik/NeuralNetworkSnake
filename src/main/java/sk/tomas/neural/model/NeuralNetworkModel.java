@@ -1,8 +1,8 @@
 package sk.tomas.neural.model;
 
 import java.io.Serializable;
+import java.util.List;
 import sk.tomas.neural.FileException;
-import sk.tomas.neural.Network;
 
 public interface NeuralNetworkModel extends Serializable {
 
@@ -14,6 +14,12 @@ public interface NeuralNetworkModel extends Serializable {
 
     boolean deleteState(String filename);
 
-    Network getClone();
+    NeuralNetworkModel getClone();
+
+    double getWeight(int fromLayer, int fromIndex, int ancestorIndex);
+
+    void setWeight(int fromLayer, int fromIndex, int ancestorIndex, double value);
+
+    List<List<Neural>> getNetwork();
 
 }

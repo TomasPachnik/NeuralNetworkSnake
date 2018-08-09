@@ -3,14 +3,15 @@ package sk.tomas.ga;
 import sk.tomas.neural.Network;
 
 import java.io.Serializable;
+import sk.tomas.neural.model.NeuralNetworkModel;
 
 class Individual implements Serializable {
 
-    private Network network;
+    private NeuralNetworkModel network;
     private double fitness = 0;
     private double runs = 0;
 
-    Individual(Network network) {
+    Individual(NeuralNetworkModel network) {
         this.network = network;
     }
 
@@ -21,11 +22,11 @@ class Individual implements Serializable {
         return 0;
     }
 
-    void setNetwork(Network network) {
+    void setNetwork(NeuralNetworkModel network) {
         this.network = network;
     }
 
-    Network getNetwork() {
+    NeuralNetworkModel getNetwork() {
         return network;
     }
 

@@ -29,10 +29,6 @@ public class Neural implements Serializable {
         this.lastValue = lastValue;
     }
 
-    public int getId() {
-        return id;
-    }
-
     void forwardPropagation() {
         double temp = 0;
         for (NeuralInput input : inputs) {
@@ -54,4 +50,11 @@ public class Neural implements Serializable {
         }
     }
 
+    List<NeuralInput> getInputs() {
+        return inputs;
+    }
+
+    double getLastValue() {
+        return lastValue;
+    }
 }

@@ -1,6 +1,6 @@
 package sk.tomas.neural.math.weightInit;
 
-public class Random implements WeightInit {
+public class RandomInit implements WeightInit {
 
     @Override
     public double initWeight() {

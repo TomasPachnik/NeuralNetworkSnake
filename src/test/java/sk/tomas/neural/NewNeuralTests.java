@@ -19,7 +19,6 @@ public class NewNeuralTests {
                 .addLayer(2, 3, true, Activation.SIGMOID)
                 .backpropagation(false)
                 .build();
-        System.out.println();
     }
 
 

@@ -1,12 +1,12 @@
 package sk.tomas.ga;
 
-import sk.tomas.neural.NetworkImpl;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import sk.tomas.neural.model.NeuralNetworkModel;
+import sk.tomas.neural.model.NeuralNetworkModelImpl;
 
-class Population  implements Serializable {
+class Population implements Serializable {
 
     private List<Individual> population;
     private final int networkRuns;
@@ -16,20 +16,20 @@ class Population  implements Serializable {
         this.networkRuns = networkRuns;
     }
 
-    Population(int populationSize, int networkRuns, int inputLayer, int hiddenLayer, int outputLayer) {
+    Population(int populationSize, int networkRuns, NeuralNetworkModel model) {
         this.population = new ArrayList<>();
         this.networkRuns = networkRuns;
-        initPopulation(populationSize, inputLayer, hiddenLayer, outputLayer);
+        initPopulation(populationSize, model);
     }
 
     List<Individual> getPopulation() {
         return population;
     }
 
-    private void initPopulation(int populationSize, int inputLayer, int hiddenLayer, int outputLayer) {
+    private void initPopulation(int populationSize, NeuralNetworkModel model) {
         int i = 0;
         while (i < populationSize) {
-            population.add(new Individual(new NetworkImpl(inputLayer, hiddenLayer, outputLayer)));
+            population.add(new Individual(model.getClone()));
             i++;
         }
     }
@@ -40,7 +40,6 @@ class Population  implements Serializable {
                 individual.run(strategy);
             }
         }
-
     }
 
     Individual getBest() {
