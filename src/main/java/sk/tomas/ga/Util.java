@@ -6,11 +6,6 @@ import java.io.*;
 
 class Util {
 
-    //TODO check
-    static double normalDistributionForMutation() {
-        return ((Math.random() * 2) - 1);
-    }
-
     static void writeFile(String filename, Genetic genetic) throws FileException {
         try {
             FileOutputStream f = new FileOutputStream(new File(filename + ".dat"));

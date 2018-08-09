@@ -12,9 +12,9 @@ import sk.tomas.neural.model.NeuralNetworkModel;
 public class NnMain {
 
     public static void main(String[] args) throws InterruptedException, FileException {
-        Strategy strategy = new StrategyImpl(20, 10);
+        Strategy strategy = new StrategyImpl(10, 10);
 
-        Genetic genetic = new GeneticImpl(0.7, 0.05, 50, 50, 100, createConfiguration(), strategy);
+        Genetic genetic = new GeneticImpl(0.7, 0.05, 50, 100, 100, createConfiguration(), strategy);
         genetic.saveAfterEachGeneration(false, null);
         NeuralNetworkModel best = genetic.run();
 
@@ -24,7 +24,7 @@ public class NnMain {
         while (alive) {
             alive = snake.move(Movement.map(best.run(snake.actualInfoLite())));
             snake.print();
-            Thread.sleep(300);
+            Thread.sleep(100);
         }
         System.out.println("score: " + snake.score());
     }
@@ -33,8 +33,8 @@ public class NnMain {
         return new NeuralConfiguration()
                 .initWeight(WeightInit.RANDOM)
                 .addLayer(0, 6, false, Activation.NONE)
-                .addLayer(1, 4, true, Activation.SIGMOID)
-                .addLayer(2, 3, true, Activation.SIGMOID);
+                .addLayer(1, 4, true, Activation.RELU)
+                .addLayer(2, 3, true, Activation.RELU);
     }
 
 }

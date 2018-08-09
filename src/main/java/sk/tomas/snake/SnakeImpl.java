@@ -65,27 +65,29 @@ public class SnakeImpl implements Snake {
 
     @Override
     public void print() {
-        StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 if (isBody(i, j)) {
                     if ((i == body.get(0).getX()) && (j == body.get(0).getY())) {
-                        stringBuilder.append("X");
+                        System.out.print(ConsoleColors.RED);
+                        System.out.print("X");
                     } else {
-                        stringBuilder.append("x");
+                        System.out.print(ConsoleColors.BLUE);
+                        System.out.print("x");
                     }
                 } else {
                     if ((i == apple.getX()) && (j == apple.getY())) {
-                        stringBuilder.append("o");
+                        System.out.print(ConsoleColors.GREEN);
+                        System.out.print("o");
                     } else {
-                        stringBuilder.append(".");
+                        System.out.print(ConsoleColors.RESET);
+                        System.out.print(".");
                     }
                 }
             }
-            stringBuilder.append("\n");
+            System.out.println();
         }
-        stringBuilder.append("\n");
-        System.out.println(stringBuilder.toString());
+        System.out.println();
     }
 
     @Override

@@ -157,7 +157,7 @@ public class GeneticImpl implements Genetic, Serializable {
             for (int j = 0; j < upperLayer; j++) {
                 if (mutationRandom.nextDouble() < mutationRate) {
                     weight = network.getWeight(bottomLayerDeep, i, j);
-                    weight += gaussianRandom.nextGaussian();
+                    weight += gaussianRandom.nextGaussian() * 2;
                     network.setWeight(bottomLayerDeep, i, j, weight);
                 }
             }
