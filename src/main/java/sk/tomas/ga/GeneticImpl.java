@@ -4,6 +4,7 @@ import sk.tomas.neural.FileException;
 
 import java.io.Serializable;
 import java.util.Random;
+
 import sk.tomas.neural.config.NeuralConfiguration;
 import sk.tomas.neural.model.NeuralNetworkModel;
 
@@ -34,7 +35,7 @@ public class GeneticImpl implements Genetic, Serializable {
     }
 
     public GeneticImpl(double crossRate, double mutationRate, int populationSize, int generations, int networkRuns,
-            NeuralConfiguration configuration, Strategy strategy) {
+                       NeuralConfiguration configuration, Strategy strategy) {
         this.crossRate = crossRate;
         this.mutationRate = mutationRate;
         this.populationSize = populationSize;
@@ -83,7 +84,7 @@ public class GeneticImpl implements Genetic, Serializable {
             newPopulation.getPopulation().set(0, population.getBest()); //elitism
             population = newPopulation;
             index++;
-            System.out.println("index: " + index + " fitness: " + population.getBest().getFitness());
+            System.out.println("population: " + index + ", fitness: " + population.getBest().getFitness());
 
             if (saveAfterEachGeneration != null) {
                 save(population.getBest().getNetwork(), saveAfterEachGeneration);
@@ -128,7 +129,7 @@ public class GeneticImpl implements Genetic, Serializable {
     }
 
     private NeuralNetworkModel[] cross(NeuralNetworkModel parent1, NeuralNetworkModel parent2,
-            NeuralNetworkModel[] children, int bottomLayer, int upperLayer, int bottomLayerDeep) {
+                                       NeuralNetworkModel[] children, int bottomLayer, int upperLayer, int bottomLayerDeep) {
         for (int i = 0; i < bottomLayer; i++) {
             for (int j = 0; j < upperLayer; j++) {
                 if (parentRandom.nextBoolean()) { //get from parent1
@@ -151,7 +152,7 @@ public class GeneticImpl implements Genetic, Serializable {
     }
 
     private NeuralNetworkModel mutate(NeuralNetworkModel network, int bottomLayer, int upperLayer,
-            int bottomLayerDeep) {
+                                      int bottomLayerDeep) {
         double weight;
         for (int i = 0; i < bottomLayer; i++) {
             for (int j = 0; j < upperLayer; j++) {

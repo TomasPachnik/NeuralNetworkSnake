@@ -2,6 +2,7 @@ apply plugin: 'java'
 
 targetCompatibility = '1.8'
 sourceCompatibility = '1.8'
+def mainClass = 'sk.tomas.snake.NnMain'
 
 repositories {
     jcenter()
@@ -19,3 +20,13 @@ test {
     }
 }
 
+task run(type: JavaExec) {
+    classpath sourceSets.main.runtimeClasspath
+    main = mainClass
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': mainClass
+    }
+}

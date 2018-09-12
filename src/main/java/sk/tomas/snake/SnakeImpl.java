@@ -67,12 +67,19 @@ public class SnakeImpl implements Snake {
     public void print() {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                if (isBody(i, j)) {
-                    if ((i == body.get(0).getX()) && (j == body.get(0).getY())) {
+                int bodyIndex = getBodyIndex(i, j);
+                if (bodyIndex >= 0) {
+                    if (bodyIndex == 0) {
                         System.out.print(ConsoleColors.RED);
                         System.out.print("X");
                     } else {
-                        System.out.print(ConsoleColors.BLUE);
+                        if (bodyIndex % 3 == 0) {
+                            System.out.print(ConsoleColors.CYAN);
+                        } else if (bodyIndex % 3 == 1) {
+                            System.out.print(ConsoleColors.BLUE);
+                        } else if (bodyIndex % 3 == 2) {
+                            System.out.print(ConsoleColors.PURPLE);
+                        }
                         System.out.print("x");
                     }
                 } else {
@@ -279,12 +286,17 @@ public class SnakeImpl implements Snake {
     }
 
     private boolean isBody(int x, int y) {
-        for (Node item : body) {
+        return getBodyIndex(x, y) >= 0;
+    }
+
+    private int getBodyIndex(int x, int y) {
+        for (int i = 0; i < body.size(); i++) {
+            Node item = body.get(i);
             if (x == item.getX() && y == item.getY()) {
-                return true;
+                return i;
             }
         }
-        return false;
+        return -1;
     }
 
     //TODO check if x is width side and y is height side
