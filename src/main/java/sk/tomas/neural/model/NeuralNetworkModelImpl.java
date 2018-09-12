@@ -3,7 +3,6 @@ package sk.tomas.neural.model;
 import java.util.List;
 import sk.tomas.neural.FileException;
 import sk.tomas.neural.Util;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class NeuralNetworkModelImpl implements NeuralNetworkModel {
 
@@ -24,17 +23,17 @@ public class NeuralNetworkModelImpl implements NeuralNetworkModel {
 
     @Override
     public void saveState(String filename) throws FileException {
-        throw new NotImplementedException();
+        throw new RuntimeException("Not implemented!");
     }
 
     @Override
     public void loadState(String filename) throws FileException {
-        throw new NotImplementedException();
+        throw new RuntimeException("Not implemented!");
     }
 
     @Override
     public boolean deleteState(String filename) {
-        throw new NotImplementedException();
+        throw new RuntimeException("Not implemented!");
     }
 
     @Override

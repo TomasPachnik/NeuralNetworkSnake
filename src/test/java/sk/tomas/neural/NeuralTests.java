@@ -46,18 +46,4 @@ public class NeuralTests {
         }
     }
 
-    @Test
-    public void testtt() {
-        Network network = new NetworkImpl(2, 2, 1, 0.4);
-        network.setWeight(1, 0, 0, 3.633942326468051);
-        network.setWeight(1, 0, 1, 2.947643361088329);
-        network.setWeight(1, 1, 0, -0.42928908915423536);
-        network.setWeight(1, 1, 1, 0.795061178619576);
-        network.setWeight(2, 0, 1, 11.05761194498972);
-        network.setWeight(2, 0, 0, -14.913480086518929);
-        double[] input = new double[]{0, 1};
-        double[] result = network.run(input);
-        System.out.println(result[0]);
-    }
-
 }

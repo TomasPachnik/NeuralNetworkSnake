@@ -9,7 +9,6 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.TomasPachnik:Servant:0.31'
     compile group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
     testCompile 'junit:junit:4.12'
 }
