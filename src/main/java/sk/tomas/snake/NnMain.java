@@ -33,8 +33,7 @@ public class NnMain {
         return new NeuralConfiguration()
                 .initWeight(WeightInit.RANDOM)
                 .addLayer(0, 6, false, Activation.NONE)
-                .addLayer(1, 4, true, Activation.RELU)
-                .addLayer(2, 3, true, Activation.RELU);
+                .addLayer(1, 3, true, Activation.RELU);
     }
 
 }
