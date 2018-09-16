@@ -30,9 +30,9 @@ GA contains strategy called elitism, which means, that the best individual from 
 
 After 100 generations performed, best NN is picked and finally starts  playing snake.
 
-[[https://github.com/TomasPachnik/NeuralNetworkSnake/blob/master/images/populations.png|alt=populations]]
+![alt text](https://github.com/TomasPachnik/NeuralNetworkSnake/blob/master/images/populations.png)
 
-[[https://github.com/TomasPachnik/NeuralNetworkSnake/blob/master/images/snake.png|alt=snake]]
+![alt text](https://github.com/TomasPachnik/NeuralNetworkSnake/blob/master/images/snake.png)
 
 ## How to run
 
