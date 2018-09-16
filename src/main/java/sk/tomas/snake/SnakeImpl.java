@@ -243,7 +243,7 @@ public class SnakeImpl implements Snake {
         if (newHead.getX() == apple.getX() && newHead.getY() == apple.getY()) {
             apple = generateApple(newHead);
             score++;
-            helpScore += 20;
+            helpScore += 50;
             helpScoreForApple = true;
         } else {
             //remove last

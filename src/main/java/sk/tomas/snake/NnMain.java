@@ -24,7 +24,7 @@ public class NnMain {
         while (alive) {
             alive = snake.move(Movement.map(best.run(snake.actualInfoLite())));
             snake.print();
-            Thread.sleep(200);
+            Thread.sleep(100);
         }
         System.out.println("score: " + snake.score());
     }
