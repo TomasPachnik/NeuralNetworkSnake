@@ -16,9 +16,7 @@ genetic algorithm - is responsible for teaching neural network how play every ti
 
 When application starts, genetic algorithm (GA) creates population (population zero) of 50 individuals (neural networks - NN) with randomly set weights.
 
-Then GA lets play every NN in population snake game 100 times and rate every NN with number describing how good it was.
-
-This number is called fitness and in this case is similar to game score.
+Then GA lets play every NN in population snake game 100 times and rate every NN with number describing how good it was. This number is called fitness and in this case is similar to game score.
 
 After that, GA pics best networks (selection) and cross them together (crossing). Also randomly mutate few attributes of NN (mutation).
 
@@ -43,10 +41,6 @@ After that, in folder build/libs/ run generated jar file by typing: "java -jar [
 You can also run the app directly from gradle by typing: "gradle run -q" (-q disables unwanted gradle text output).
 
 In both ways mentioned above you actually run class called NnMain.java. You can also run from IDE class Main.java, which allows you play snake by yourself.
-
-## Built With
-
-* [Gradle](https://gradle.org/) - Dependency management and build tool
 
 ## License
 
