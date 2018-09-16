@@ -24,13 +24,17 @@ public class SnakeImpl implements Snake {
         randomY = new Random();
         this.body = generateBody();
         this.lastRotation = calculateLastRotation();
-        this.apple = generateApple();
+        this.apple = generateApple(generateBody().get(0));
         lastHelpScore = calculateHelpScore();
     }
 
-    private Node generateApple() {
+    /**
+     * @param node new head, which is not part of body yet
+     * @return
+     */
+    private Node generateApple(Node node) {
         Node apple = new Node(randomX.nextInt(height), randomY.nextInt(width));
-        while (isBody(apple.getX(), apple.getY())) {
+        while (isBody(apple.getX(), apple.getY()) || (apple.getX() == node.getX() && apple.getY() == node.getY())) {
             apple = new Node(randomX.nextInt(height), randomY.nextInt(width));
         }
         return apple;
@@ -237,7 +241,7 @@ public class SnakeImpl implements Snake {
         Node newHead = new Node(body.get(0).getX() + x, body.get(0).getY() + y);
         //if apple
         if (newHead.getX() == apple.getX() && newHead.getY() == apple.getY()) {
-            apple = generateApple();
+            apple = generateApple(newHead);
             score++;
             helpScore += 20;
             helpScoreForApple = true;
