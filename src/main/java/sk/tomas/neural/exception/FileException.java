@@ -1,4 +1,4 @@
-package sk.tomas.neural;
+package sk.tomas.neural.exception;
 
 public class FileException extends LogicException {
 

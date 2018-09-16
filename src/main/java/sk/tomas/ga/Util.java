@@ -1,6 +1,6 @@
 package sk.tomas.ga;
 
-import sk.tomas.neural.FileException;
+import sk.tomas.neural.exception.FileException;
 
 import java.io.*;
 

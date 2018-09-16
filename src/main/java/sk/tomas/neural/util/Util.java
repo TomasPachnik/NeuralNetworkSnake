@@ -1,4 +1,7 @@
-package sk.tomas.neural;
+package sk.tomas.neural.util;
+
+import sk.tomas.neural.exception.FileException;
+import sk.tomas.neural.model.NeuralNetworkModel;
 
 import java.io.*;
 
@@ -81,7 +84,7 @@ public class Util {
         return result;
     }
 
-    public static void writeFile(String filename, Network network) throws FileException {
+    public static void writeFile(String filename, NeuralNetworkModel network) throws FileException {
         try {
             FileOutputStream f = new FileOutputStream(new File(filename + ".dat"));
             ObjectOutputStream o = new ObjectOutputStream(f);
@@ -93,11 +96,11 @@ public class Util {
         }
     }
 
-    public static Network readFile(String filename) throws FileException {
+    public static NeuralNetworkModel readFile(String filename) throws FileException {
         try {
             FileInputStream fi = new FileInputStream(new File(filename + ".dat"));
             ObjectInputStream oi = new ObjectInputStream(fi);
-            Network network = (Network) oi.readObject();
+            NeuralNetworkModel network = (NeuralNetworkModel) oi.readObject();
             oi.close();
             fi.close();
             return network;

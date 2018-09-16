@@ -1,7 +1,5 @@
 package sk.tomas.ga;
 
-import sk.tomas.neural.Network;
-
 import java.io.Serializable;
 import sk.tomas.neural.model.NeuralNetworkModel;
 

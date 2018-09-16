@@ -2,7 +2,7 @@ package sk.tomas.neural.model;
 
 import java.io.Serializable;
 import java.util.List;
-import sk.tomas.neural.FileException;
+import sk.tomas.neural.exception.FileException;
 
 public interface NeuralNetworkModel extends Serializable {
 

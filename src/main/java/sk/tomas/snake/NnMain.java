@@ -3,7 +3,7 @@ package sk.tomas.snake;
 import sk.tomas.ga.Genetic;
 import sk.tomas.ga.GeneticImpl;
 import sk.tomas.ga.Strategy;
-import sk.tomas.neural.FileException;
+import sk.tomas.neural.exception.FileException;
 import sk.tomas.neural.config.NeuralConfiguration;
 import sk.tomas.neural.config.enums.Activation;
 import sk.tomas.neural.config.enums.WeightInit;
